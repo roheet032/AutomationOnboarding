@@ -1,4 +1,14 @@
 <script>
+
+import { RegisterCollection } from '../api/RegisterCollection';
+
+export default{
+  meteor:{
+    register(){
+      return RegisterCollection.find({}).fetch()
+    }
+  }
+}
 // export default {
 //   data() {
 //     return {

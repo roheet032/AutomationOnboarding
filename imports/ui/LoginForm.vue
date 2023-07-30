@@ -1,103 +1,123 @@
-
 <template>
-    <div class="login-container">
-      <div class="login-form">
+<div class="login-container" @submit.prevent="handleLogin">
+    <div class="login-form">
         <img class="image" src="keelalogo.png" alt="">
         <form @submit.prevent="login">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" v-model="email" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" v-model="password" required />
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">Login</button><br>
-            <div class="register">Haven't Register Organization Yet?? <br><button v-on:click="redirectToRegisterPage" >Register Now</button></div>
-          </div>
-          
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" v-model="email" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" v-model="password" required />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" v-on:click="redirectToLandingPage">Login</button><br>
+                <div class="register">Haven't Register Organization Yet?? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
+            </div>
+
         </form>
-       
-      </div>
-      
-      
+
     </div>
-    
-  </template>
-  
-  <script>
-    
-  export default {
+
+</div>
+</template>
+
+<script>
+import {
+    Meteor
+} from "meteor/meteor"
+
+export default {
     data() {
-      return {
-        email: '',
-        password: '',
-      };
+        return {
+            email: '',
+            password: '',
+        };
     },
 
     methods: {
         redirectToRegisterPage() {
-      this.$router.push('./register');
+            this.$router.push('./register');
+        },
+
+        // redirectToLandingPage() {
+        //     this.$router.push('./index');
+        // },
+
+        handleLogin(event) {
+
+            event.preventDefault();
+            // Call the Meteor.loginWithPassword method to handle user login
+            Meteor.loginWithPassword(this.email, this.password, (error) => {
+                    if (error) {
+                        alert("Please Enter Valid Email and Password:", error);
+                    } else {
+                        this.$router.push("/index"); 
+                }
+
+              })
+        },
+        login() {
+            const userData = {
+                email: this.email,
+                password: this.password,
+            }
+            // Here, you can implement your login logic using Meteor's authentication methods.
+            // For simplicity, we'll just display the login credentials in the console.
+            console.log('Login Attempt:');
+            console.log('Email:', this.email);
+            console.log('Password:', this.password);
+        },
     },
-      login() {
-        // Here, you can implement your login logic using Meteor's authentication methods.
-        // For simplicity, we'll just display the login credentials in the console.
-        console.log('Login Attempt:');
-        console.log('Email:', this.email);
-        console.log('Password:', this.password);
-      },
-    },
-  };
-  </script>
-  
-  <style>
-   
-  
-  .login-container {
+}
+// Call your login API or Meteor method here
+</script>
+
+<style>
+.login-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    height:100vh;
-    
-  }
-  
-  .login-form {
-    background-color:#f9f9f9 ;
+    height: 100vh;
+
+}
+
+.login-form {
+    background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 320px;
-  }
+}
 
-  .register{
-    
-    color:red;
-    padding-left:25px;
-    
-    
-  }
-  
-  .image {
-    color:#f5f5f5;
+.register {
+
+    color: red;
+    padding-left: 25px;
+
+}
+
+.image {
+    color: #f5f5f5;
     text-align: center;
-    width:320px;
+    width: 320px;
     margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom:20px;
-    padding-right:20px;
-  }
-  
-  label {
+}
+
+.form-group {
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+label {
     display: block;
     margin-bottom: 5px;
     color: #666;
-  }
-  
-  input[type="email"],
-  input[type="password"] {
+}
+
+input[type="email"],
+input[type="password"] {
     width: 100%;
     padding: 12px;
     font-size: 16px;
@@ -106,39 +126,39 @@
     background-color: #f9f9f9;
     color: #333;
     transition: border-color 0.3s ease;
-  }
-  
-  input[type="email"]:focus,
-  input[type="password"]:focus {
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
     outline: none;
     border-color: #007bff;
-  }
-  
-  button {
+}
+
+button {
     background-color: #7745D6;
     padding: 12px;
     font-size: 16px;
-    color:white;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
     transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #622cc9;
-  }
-  
-  .btn{
+}
+
+.btn {
     background-color: #7745D6;
-    margin-left:15px;
-    margin-bottom:25px;
-   
-  }
-  
-  /* Center the button in the form */
-  .form-group:last-child {
+    margin-left: 15px;
+    margin-bottom: 25px;
+
+}
+
+/* Center the button in the form */
+.form-group:last-child {
     text-align: center;
-  }
-  </style>
+}
+</style>

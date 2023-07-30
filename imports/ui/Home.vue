@@ -7,7 +7,7 @@
        
       </div>
       <!-- Insert the login button here -->
-      <button @click="redirectToLogin" class="login-button">Login</button>
+      <button @click="redirectToLogin" class="login-button">Click Me To Visit Login Page</button>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
 <style>
 /* Add your styles for the homepage here */
 
-html, body {
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -67,22 +67,23 @@ h1 {
 
 .login-button {
   position: absolute;
-  bottom: 20px; /* Adjust the distance from the bottom as needed */
-  left: 50%;
-  margin-bottom:110px;
+  bottom: 100px; 
+  left:50%;
   transform: translateX(-50%);
   padding: 12px 24px;
   font-size: 18px;
-  background-color: blue;
+  background-color: #7745D6;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #622cc9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>
 
