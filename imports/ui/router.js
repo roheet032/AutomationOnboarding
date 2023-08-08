@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './Home.vue'
 
-
-
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -27,6 +25,37 @@ export const router = createRouter({
       component: () => import('./LandingPage.vue'),
       meta:{requiresAuth:true},
     },
+    {
+      path: '/contacts',
+      name: 'contacts',
+      component: () => import('./components/Contacts.vue'),
+    },
+    {
+      path: '/organizations',
+      name: 'organizations',
+      component: () => import('./components/Organizations.vue'),
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: () => import('./components/Tags.vue'),
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('./components/Users.vue'),
+    },
+    {
+      path: '/modals',
+      name: 'modals',
+      component: () => import('./modals.vue'),
+    },
+    // {
+    //   path: '/sidebar',
+    //   name: 'sidebar',
+    //   component: () => import('./Sidebar.vue'),
+    // },
+    
   ],
 })
 

@@ -1,32 +1,32 @@
-<script>
 
+<template>
+  <div>
+    
+    
+    <router-view />
+  </div>
+</template>
+
+
+<script>
+import { createHydrationRenderer, onMounted } from 'vue'
+import { initFlowbite } from 'flowbite'
 import { RegisterCollection } from '../api/RegisterCollection';
 
 export default{
+
+  setup()
+  { onMounted(() => {
+    initFlowbite();
+  })},
+ 
   meteor:{
     register(){
       return RegisterCollection.find({}).fetch()
     }
   }
 }
-// export default {
-//   data() {
-//     return {
-//       user: null,
-//     }
-//   },
-//   created() {
-//     Tracker.autorun(()=>{
-//       this.user = Meteor.user();
-//       console.log(this.user);
-//     }) 
-//   },
-// }
 </script>
+<style scoped>
+</style>
 
-<template>
-  <div class="p-8">
-    
-    <router-view />
-  </div>
-</template>

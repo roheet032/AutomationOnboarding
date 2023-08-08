@@ -1,164 +1,247 @@
 <template>
-    <div class="landing-page">
-      <div class="sidebar">
-        <img src="keelalogo.png" alt="Keela Logo" class="logo">
-        <a href="#">Contacts</a>
-        <a href="#">Organizations</a>
-        <a href="#">Tags</a>
-        <button v-if="userIsLoggedIn" @click="handleLogout" class="logout-btn">Logout</button>
-      </div>
-  
-      <div class="main-content">
-        <section id="contacts">
-          <h2><marquee>Welcome to the Keela Landing Page <img class="keela-img" src="keela.png" alt=""></marquee></h2>
-          <!-- Your specific content for the Contacts section goes here -->
-        </section>
-      </div>
+    
+    <div>
+    
+        <div class="topnav">
+            <div class="logo">
+                <img  src="keelalogo.png" alt="Keela Logo" >
+            </div>
+    
+            <div class="right-btn">
+                <span class="mr-10">Welcome to Keela!!!</span>
+                <button @click="handleLogout" class="btn-logout">Logout</button>
+            </div>
+        </div>
+        <!-- <input type="checkbox" id="check">
+        <label for="check">
+          <i class="fas fa-bars" id="btn"></i>
+          <i class="fas fa-times" id="cancel"></i>
+        </label> -->
+        <div class="sidebar">
+           
+            <ul>
+                <li><router-link to="/organizations"><span class="material-symbols-outlined">corporate_fare</span>Organizations</router-link></li>
+                <li><router-link to="/contacts"> <span class="material-symbols-outlined">contacts</span>Contacts</router-link></li>
+                <li><router-link to="/tags"><span class="material-symbols-outlined">tag</span>Tags</router-link></li>
+                <li><router-link to="/users"><span class="material-symbols-outlined">group</span>Users</router-link></li>
+            </ul>
+        </div>
+        
     </div>
-  </template>
+    </template>
+    <script>
+    import {
+        Meteor
+    } from 'meteor/meteor';
+    
+    export default {
+        name:"LandingPage",
+        data() {
+            return {
+                fullname:"",
+            };
+        },
+    
+        methods: {
+            handleLogout() {
+                Meteor.logout((error) => {
+                    if (error) {
+                        alert("User cannot logout!!!");
+                    } else {
+                        this.$router.push('/');
+                    }
+                });
+            },
+    
+            updateUserLoggedInStatus() {
+                // Check if the user is logged in
+                this.userIsLoggedIn = !!Meteor.userId();
+            },
+    
+            onUserAuthenticated() {
+                // Called when the user is authenticated (login successful)
+                this.updateUserLoggedInStatus();
+            },
+        },
+    
+        created() {
+            // Subscribe to the 'userData' publication
+            this.userDataSubscription = Meteor.subscribe('userData');
+            this.updateUserLoggedInStatus();
+        },
+    
+        destroyed() {
+            // Stop the subscription when the component is destroyed
+            this.userDataSubscription.stop();
+        },
+    };
+    </script>
+
+    
+    
   
-  <script>
-  import { Meteor } from 'meteor/meteor';
+    
+    
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        text-decoration: none;
+    }
+    
+    .sidebar {
+        position: fixed;
+        /* left: -250px; */
+        left: 0;
+        width: 250px;
+        height: 100%;
+        background: #042331;
+        transition: all .5s ease;
+        margin-top: 46px;
+    }
+    
+    .sidebar header {
+        font-size: 22px;
+        color: white;
+        line-height: 70px;
+        text-align: center;
+        background: #063146;
+        user-select: none;
+    }
+    
+    .sidebar ul a {
+        display: block;
+        height: 100%;
+        width: 100%;
+        line-height: 65px;
+        font-size: 20px;
+        color: white;
+        padding-left: 40px;
+        box-sizing: border-box;
+        border-bottom: 1px solid black;
+        border-top: 1px solid rgba(189, 10, 10, 0.1);
+        transition: .4s;
+    }
+    
+    ul li:hover a {
+        padding-left: 50px;
+    }
+    
+    .sidebar ul a i {
+        margin-right: 16px;
+    }
+    
+    #check {
+        display: none;
+    }
+    
+    .logo{
+        width:140px;
+    }
+    
+    label #btn,
+    label #cancel {
+        position: absolute;
+        background: #042331;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    label #btn {
+        left: 40px;
+        top: 25px;
+        font-size: 35px;
+        color: white;
+        padding: 6px 12px;
+        transition: all .5s;
+    }
+    
+    label #cancel {
+        z-index: 1111;
+        left: -195px;
+        top: 17px;
+        font-size: 30px;
+        color: #0a5275;
+        padding: 4px 9px;
+        transition: all .5s ease;
+    }
+    
+    #check:checked~.sidebar {
+        left: 0;
+    }
+    
+    #check:checked~label #btn {
+        left: 250px;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    #check:checked~label #cancel {
+        left: 195px;
+    }
+    
+    #check:checked~section {
+        margin-left: 250px;
+    }
+    
   
-  export default {
-    data() {
-      return {
-        userIsLoggedIn: false,
-      };
-    },
+    
+    .topnav {
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        width: calc(100%);
+        display: flex;
+        justify-content: space-between;
+        background: #063146;
+        text-align: center;
+        padding:4px;
+    }
+    
+    /* Style the links inside the navigation bar */
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+       
+    }
+    
+    /* Change the color of links on hover */
+    .topnav a:hover {
+        color: black;
+        background: grey;
+    }
+    
+    /* Add a color to the active/current link */
+    .topnav a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+    
+    .mr-10 {
+        margin-right: 10px;
+        color:white
+    }
+    
+    .btn-logout {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        color: #fff;
+        background: #7745D6;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    
+    </style>
+    
+
   
-    methods: {
-      handleLogout() {
-        Meteor.logout((error) => {
-          if (error) {
-            alert("User cannot logout!!!");
-          } else {
-            this.$router.push('/');
-          }
-        });
-      },
-  
-      updateUserLoggedInStatus() {
-        // Check if the user is logged in
-        this.userIsLoggedIn = !!Meteor.userId();
-      },
-  
-      onUserAuthenticated() {
-        // Called when the user is authenticated (login successful)
-        this.updateUserLoggedInStatus();
-      },
-    },
-  
-    created() {
-      // Subscribe to the 'userData' publication
-      this.userDataSubscription = Meteor.subscribe('userData');
-      this.updateUserLoggedInStatus();
-    },
-  
-    destroyed() {
-      // Stop the subscription when the component is destroyed
-      this.userDataSubscription.stop();
-    },
-  };
-  </script>
-  
-  <style>
-  /* Main container styles */
-  .landing-page {
-    display: flex;
-    height: 100vh;
-  }
-  
-  /* Sidebar styles */
-  .sidebar {
-    width: 200px;
-    background-color: #333;
-    color: #fff;
-    padding-top: 20px;
-  }
-  
-  .sidebar a {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 16px;
-  }
-  
-  .sidebar a:hover {
-    background-color: #622cc9;
-  }
-  
-  /* Logo styles */
-  .logo {
-    width: 150px;
-    margin-left: 10px;
-    margin-bottom: 20px;
-  }
-  
-  /* Logout button styles */
-  .logout-btn {
-    width: 100px;
-  position: absolute; /* Position the logout button absolutely within the sidebar */
-  bottom: 20px; /* Set the distance from the bottom of the sidebar */
-  left: 20px; /* Set the distance from the left of the sidebar */
-  background-color: #7745d6;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  }
-  
-  .logout-btn:hover {
-    background-color: #622cc9;
-  }
-  
-  /* Main content styles */
-  .main-content {
-    flex: 1;
-    padding: 20px;
-    background-color: #f0f0f0;
-  }
-  
-  /* Section styles */
-  section {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-  }
-  
-  /* Marquee styles */
-  marquee {
-    margin-top: 20px;
-  }
-  
-  /* Keela logo image styles */
-  .keela-img {
-    width: 50px;
-    vertical-align: middle;
-    margin-left: 10px;
-  }
-  
-  /* Additional styles for better layout */
-  h2 {
-    margin: 0;
-    font-size: 24px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-  }
-  
-  img.img1 {
-    margin-top: 20px;
-    width: 50px;
-  }
-  
-  /* Center the logout button */
-  .sidebar .logout-btn {
-    display: block;
-    margin: 20px auto;
-  }
-  </style>
+
+
   

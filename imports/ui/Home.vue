@@ -1,19 +1,22 @@
 <!-- imports/ui/Homepage.vue -->
 <template>
   <div class="homepage">
+    
     <div class="background-image">
-      <div class="marquee">
-        <span><marquee>Welcome to Keela!</marquee> </span>
-       
-      </div>
+
       <!-- Insert the login button here -->
-      <button @click="redirectToLogin" class="login-button">Click Me To Visit Login Page</button>
+      <button @click="redirectToLogin" class="login-button">Click Me To Enter KeelaWorld<span class="material-symbols-outlined">
+login
+</span></button>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
+  name:"Home",
+ 
   methods: {
     redirectToLogin() {
       // Redirect to the login page when the login button is clicked
@@ -84,6 +87,11 @@ h1 {
 .login-button:hover {
   background-color: #622cc9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.material-symbols-outlined{
+  padding-left:5px;
+  vertical-align: middle;
 }
 </style>
 
