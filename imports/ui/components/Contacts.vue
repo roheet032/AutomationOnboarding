@@ -1,17 +1,18 @@
 <template>
-<Sidebar />
-<div class="controls">
 
+    <Sidebar />
+    <div class="container">
     <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <h2>This is Contact main content page</h2>
                 <button class="add-button" @click="openAddContactModal">Add Contact</button>
-                <table>
+                <div class="contact-table-container" :class="{ 'blur-background': isModalOpen }"></div>
+                <table class="contact-table">
                     <thead>
                         <tr>
-                            <th>FullName</th>
+                            <th>Full Name</th>
                             <th>Email</th>
+                            <th>Address</th>
                             <th>Organization</th>
                             <th>Role</th>
                             <th>Action</th>
@@ -21,6 +22,7 @@
                         <tr v-for="(contact, index) in contacts" :key="index">
                             <td>{{ contact.fullName }}</td>
                             <td>{{ contact.email }}</td>
+                            <td>{{ contact.address }}</td>
                             <td>{{ contact.organization }}</td>
                             <td>{{ contact.role }}</td>
                             <td>
@@ -30,79 +32,116 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <ContactForm ref="contactForm" />
+                <ContactForm ref="contactForm"  @close-modal="isModalOpen = false"/>
             </div>
         </modal>
     </div>
+    
 </div>
 </template>
 
 <script>
 import Sidebar from "./../Sidebar.vue";
-
-import ContactForm from "./../ContactForm.vue"
+import ContactForm from "./../Forms/ContactForm.vue";
 
 export default {
-
     name: "Contacts",
-
     components: {
-
         Sidebar,
         ContactForm
     },
-
     data() {
         return {
             contacts: [{
-                    fullName: 'John Doe',
-                    email: 'john@example.com',
-                    organization: 'ABC Corp',
-                    role: 'Manager'
-                },
+                    fullName: "Rohit Johnson",
+                    email: "rjohn@example.com",
+                    address: "Kathmandu",
+                    organization: "ABC Corp",
+                    role: "Administrator"
+                }
                 // Add more contact objects as needed
-            ]
+            ],
+            isModalOpen:false,
         };
     },
     methods: {
         openAddContactModal() {
-      this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
-    },
-
+            this.isModalOpen=true;
+            this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
+        },
         editContact(index) {
             // Implement your edit logic here
-            console.log('Edit contact at index:', index);
+            console.log("Edit contact at index:", index);
         },
         deleteContact(index) {
             // Implement your delete logic here
             this.contacts.splice(index, 1);
         }
-    },
-    methods: {
-
     }
 };
 </script>
 
 <style>
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Center horizontally */
+    height: 300px;
+    margin-left:200px;
+     /* Ensure full viewport height */
+}
+
 .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    flex: 1; /* Take up remaining height */
+    padding: 10px; /* Add padding for spacing */
+
+}
+
+.contact-table-container {
+    width: 100%;
+    padding: 20px;
+    text-align: center; /* Center table content */
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .main-content {
+        align-items: center;
+        justify-content: flex-start;
+    }
+    
+    .contact-table-container {
+        padding: 10px;
+    }
+}
+/* .main-content {
     position: absolute;
     right: 200px;
     top: 50px;
-}
+    
+} */
 
-table {
-    width: 50%;
+.contact-table {
+    text-align: center;
+    padding:4px;
+    width: 100%;
     border-collapse: collapse;
-    margin-top: 65px;
-    padding: 50px;
+    margin-top: 20px;
 }
 
 th,
 td {
-    padding: 10px;
+    padding: 12px 15px;
     text-align: center;
+    border: 1px solid #ddd;
 }
 
 th {
@@ -110,7 +149,7 @@ th {
 }
 
 button {
-    padding: 5px 10px;
+    padding: 6px 12px;
     cursor: pointer;
     border: none;
     border-radius: 4px;
@@ -118,23 +157,39 @@ button {
 }
 
 button.edit-button {
-    background-color: blue;
+    background-color: rgb(18, 18, 178);
     color: white;
 }
 
 button.delete-button {
-    background-color: #f44336;
+    background-color: #c01c11;
     color: white;
 }
 
 .add-button {
     float: right;
     margin-top: 15px;
-    background-color: #2196F3;
+    margin-bottom: 5px;
+    background-color: #7745D6;
     color: white;
     border: none;
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     cursor: pointer;
 }
+
+ .add-contact:hover{
+    background-color: #622cc9;
+    cursor: pointer;
+ }
+.blur-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+  backdrop-filter: blur(5px); /* Adjust the blur intensity as needed */
+}
+
 </style>

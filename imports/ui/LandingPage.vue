@@ -12,11 +12,7 @@
                 <button @click="handleLogout" class="btn-logout">Logout</button>
             </div>
         </div>
-        <!-- <input type="checkbox" id="check">
-        <label for="check">
-          <i class="fas fa-bars" id="btn"></i>
-          <i class="fas fa-times" id="cancel"></i>
-        </label> -->
+      
         <div class="sidebar">
            
             <ul>

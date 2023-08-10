@@ -12,7 +12,7 @@
                 <input type="password" id="password" v-model="password" required />
             </div>
             <div class="form-group">
-                <button type="submit" class="loginbtn"><span class="material-symbols-outlined">login</span>Log In</button><br>
+                <button type="submit" class="loginbtn" v-on:click="redirectToContact"><span class="material-symbols-outlined">login</span>Log In</button><br>
                 <div class="register">Haven't Registered an Organization Yet? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
             </div>
         </form>
@@ -37,8 +37,8 @@ export default {
       this.$router.push('./register');
     },
 
-    redirectToLandingPage() {
-      this.$router.push('./index');
+    redirectToContact() {
+      this.$router.push('./contacts');
     },
 
     handleLogin(event) {
@@ -48,7 +48,7 @@ export default {
         if (error) {
           alert("Please Enter Valid Email and Password:", error);
         } else {
-          this.$router.push("/index");
+          this.$router.push("./contacts");
         }
       });
     },

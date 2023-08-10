@@ -1,216 +1,128 @@
-<!-- <template>
-<Sidebar />
-<div class="main-content">I will write my tag content here
+<template>
+<div>
+    <Sidebar />
+
+    <div class="main-content">
+        <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
+            <div class="addContactModal">
+                <button class="add-button" @click="openAddContactModal">Add Tags</button>
+                <table class="contact-table">
+                    <thead>
+                        <tr>
+                            <th>Tag Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(contact, index) in contacts" :key="index">
+                            <td>{{ contact.tagName }}</td>
+                            
+                            <td>
+                                <button class="edit-button" @click="editContact(index)">Edit</button>
+                                <button class="delete-button" @click="deleteContact(index)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ContactForm ref="contactForm" />
+            </div>
+        </modal>
+    </div>
 
 </div>
-
 </template>
 
+    
 <script>
-import Sidebar from "./../Sidebar.vue"
+import Sidebar from "./../Sidebar.vue";
+import ContactForm from "./../Forms/ContactForm.vue";
+
 export default {
-    name: "Tags",
-
+    name: "Contacts",
     components: {
-        Sidebar
+        Sidebar,
+        ContactForm
     },
+    data() {
+        return {
+            contacts: [{
+                
+                    tagName: "Rohit Tag",
+                   
+                }
+                // Add more contact objects as needed
+            ]
+        };
+    },
+    methods: {
+        openAddContactModal() {
 
+            this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
+        },
+        editContact(index) {
+            // Implement your edit logic here
+            console.log("Edit contact at index:", index);
+        },
+        deleteContact(index) {
+            // Implement your delete logic here
+            this.contacts.splice(index, 1);
+        }
+    }
 };
 </script>
 
+    
 <style>
-
-</style> -->
-<template>
-    <Sidebar />
-    <div class="main-content">
-        <div>
-            <button class="button" @click="showModal = true">
-                Add Tags
-            </button>
-            <transition name="fade" appear>
-                <div class="modal-overlay" v-if="showModal" @click="showModal = false"></div>
-            </transition>
-            <transition name="slide" appear>
-                <div class="modal" v-if="showModal">
-
-                    <form>
-                        <h2>Add Tags</h2>
-                        <label for="fullName">Tag Name:</label>
-                        <input type="text" id="fullName" required><br>
-
-                        <button class="button-save" @click="showModal = true">
-                            Save
-                        </button><br>
-                        <button class="button-cancel" @click="showModal = false">
-                            Cancel
-                        </button>
-                    </form>
-
-                </div>
-            </transition>
-        </div>
-        
-         
-    </div>
-</template>
-
-<script>
-import Sidebar from "./../Sidebar.vue"
-export default {
-    name: "Tags",
-
-    components: {
-        Sidebar
-    },
-    data(){   return {
-   showModal: false,
-  }}
-
-}
-</script>
-<style>
-* {
- margin: 0;
- padding: 0;
- box-sizing: border-box;
+.main-content {
+    position: absolute;
+    right: 200px;
+    top: 50px;
 }
 
-.main-content{
-  position: absolute; 
-  right:200px;
-  top:100px; 
-
-}
-
-.button {
- appearance: none;
- outline: none;
- border: none;
- background: none;
- cursor: pointer;
-
- display: inline-block;
- padding: 15px 25px;
- background-image: linear-gradient(to right, #CC2E5D, #FF5858);
- border-radius: 8px;
-
- color: #FFF;
- font-size: 18px;
- font-weight: 700;
-
- box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
- transition: 0.4s ease-out;
-
-}
-
-.modal-overlay {
- position: absolute;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- z-index: 1;
- background-color: rgba(0, 0, 0, 0.3);
- position: absolute; 
- right:150px;
-
-}
-
-.modal {
- position: fixed;
- top: 50%;
- left: 50%;
- transform: translate(-50%, -50%);
- z-index: 1;
-
- width: 100%;
- max-width: 400px;
- background-color: #FFF;
- border-radius: 16px;
- padding: 100px;
-
-}
-
-.fade-enter-active,
-.fade-leave-active {
- transition: opacity .5s;
-}
-
-.fade-enter,
-.fade-leave-to {
- opacity: 0;
-}
-
-.slide-enter-active,
-.slide-leave-active {
- transition: transform .5s;
-}
-
-.slide-enter,
-.slide-leave-to {
- transform: translateY(-50%) translateX(100vw);
-}
-.button-save{
-    margin:10px;
-
-    color:white;
-    cursor: pointer;
-
- display: inline-block;
- padding: 10px 10px;
- background-image: linear-gradient(to right,blue, lightblue);
- border-radius: 8px;
-
- color: #FFF;
- font-size: 18px;
- font-weight: 50;
-
- box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
- transition: 0.4s ease-out;
-}
-
-.button-cancel{
-    margin:10px;
-    background-color: red;
-    color:white;
-    cursor: pointer;
-
- display: inline-block;
- padding: 10px 10px;
- background-image: linear-gradient(to right, rgb(197, 35, 35),rgb(226, 64, 64) );
- border-radius: 8px;
-
- color: #FFF;
- font-size: 18px;
- font-weight: 700;
-
- box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
- transition: 0.4s ease-out;
-}
-
-form {
-    width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 2px solid #ccc; 
-    border-radius: 10px; 
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color:purple;
-  }
-
-  input[type="text"] {
+.contact-table {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 6px 12px;
+    cursor: pointer;
+    border: none;
     border-radius: 4px;
-  }
+    margin-right: 5px;
+}
 
+button.edit-button {
+    background-color: blue;
+    color: white;
+}
 
+button.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.add-button {
+    float: right;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
 </style>

@@ -2,7 +2,7 @@
 <template>
     <div class="contact-form">
       <modal  v-if="modalVisible" name="addContactModal" :adaptive="true" width="400px" height="280px">
-        <h2>Contact Us</h2>
+        <h2>TagForm</h2>
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="name">Name:</label>
@@ -26,7 +26,7 @@
   <script>
   export default {
 
-    name:"ContactForm",
+    name:"TagForm",
     
     data() {
       return {
@@ -86,4 +86,3 @@
     cursor: pointer;
   }
   </style>
-  

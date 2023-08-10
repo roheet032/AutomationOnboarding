@@ -27,10 +27,18 @@
 </template>
 
 <script>
-
+import {Meteor} from "meteor/meteor"
 
 export default{
     name:"Sidebar",
+    meteor: {
+    $subscribe: {
+      users: [],
+    },
+    currentUser() {
+      return Meteor.user();
+    },
+  },
 
     methods: {
             handleLogout() {
@@ -46,7 +54,6 @@ export default{
    
         }
     }
-
 
 </script>
 

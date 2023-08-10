@@ -79,6 +79,8 @@ export default {
                 if (error) {
                     alert("Email already exists");
                 } else {
+
+                    alert("Account created successfully!!!");
                     // Redirect to the dashboard or login page upon successful registration
                     this.$router.push("/login"); // Replace 'login' with the appropriate route
                 }
