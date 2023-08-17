@@ -29,27 +29,27 @@ export const router = createRouter({
       path: '/contacts',
       name: 'contacts',
       component: () => import('./components/Contacts.vue'),
+      meta:{requiresAuth:true},
     },
     {
       path: '/organizations',
       name: 'organizations',
       component: () => import('./components/Organizations.vue'),
+      meta:{requiresAuth:true},
     },
     {
       path: '/tags',
       name: 'tags',
       component: () => import('./components/Tags.vue'),
+      meta:{requiresAuth:true},
     },
     {
       path: '/users',
       name: 'users',
       component: () => import('./components/Users.vue'),
+      meta:{requiresAuth:true},
     },
-    {
-      path: '/modals',
-      name: 'modals',
-      component: () => import('./modals.vue'),
-    },
+  
     // {
     //   path: '/sidebar',
     //   name: 'sidebar',
@@ -63,7 +63,7 @@ export const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !Meteor.userId()) {
     // Redirect to the login page if the route requires authentication and the user is not logged in
-    next('/');
+    next('/login');
   } else {
     // Allow access to the route
     next();

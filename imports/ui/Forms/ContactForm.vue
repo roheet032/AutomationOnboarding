@@ -1,5 +1,3 @@
-
-
 <template>
     <div class="contact-form">
        
@@ -18,16 +16,17 @@
                     </div>
                     <div class="form-group">
                         <label for="address">Address:</label>
-                        <textarea id="address" class="input-field" v-model="formData.address"></textarea>
+                        <input type="address" class="input-field" v-model="formData.address">
                     </div>
                     <div class="form-group">
-                        <label for="organization">Organization:</label>
-                        <input type="text" id="organization" class="input-field" v-model="formData.organization" />
+                        <label for="phonenumber">Phone Number:</label>
+                        <input type="text" id="phonenumber" class="input-field" v-model="formData.phonenumber" />
                     </div>
                     <div class="form-group">
-                        <label for="role">Role:</label>
-                        <input type="text" id="role" class="input-field" v-model="formData.role" />
+                        <label for="tag">Tags:</label>
+                        <input type="text" id="phonenumber" class="input-field" v-model="formData.tags" />
                     </div>
+                    
                     <div class="button-group">
                         
                           <button class="add-button" type="submit">Add</button>
@@ -56,8 +55,9 @@ export default {
         fullName: "",
         email: "",
         address: "",
-        organization: "",
-        role: ""
+        phonenumber: "",
+        tags:""
+        
       }
     };
   },
@@ -83,13 +83,7 @@ export default {
       this.$emit("close-modal"); // Emit event to close background blur
       this.resetFormData(); // Clear form fields on cancel
     },
-    resetFormData() {
-      this.formData.fullName = "";
-      this.formData.email = "";
-      this.formData.address = "";
-      this.formData.organization = "";
-      this.formData.role = "";
-    }
+ 
   }
 };
 </script>

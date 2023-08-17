@@ -11,7 +11,7 @@
 <script>
 import { createHydrationRenderer, onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
-import { RegisterCollection } from '../api/RegisterCollection';
+import { RegisterCollection } from '../api/Collection/RegisterCollection';
 
 export default{
 

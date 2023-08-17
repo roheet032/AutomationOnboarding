@@ -8,7 +8,7 @@
         </div>
 
         <div class="right-btn">
-            <span class="mr-10">Welcome To Keela!!!</span>
+            <span class="mr-10">Welcome To Keela</span>
             <button @click="handleLogout" class="btn-logout">Logout</button>
         </div>
     </div>
@@ -46,7 +46,7 @@ export default{
                     if (error) {
                         alert("User cannot logout!!!");
                     } else {
-                        this.$router.push('/');
+                        this.$router.push('/login');
                     }
                 });
             },

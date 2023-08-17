@@ -2,10 +2,11 @@
 <div>
     <Sidebar />
 
-    <div class="main-content">
+    <div class="container">
+        <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button" @click="openAddContactModal">Add Tags</button>
+                <button class="add-button" @click="openAddTagModal">Create Tag</button>
                 <table class="contact-table">
                     <thead>
                         <tr>
@@ -24,9 +25,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <ContactForm ref="contactForm" />
+                <TagForm ref="tagForm"  @close-modal="isModalOpen = false" />
             </div>
         </modal>
+    </div>
     </div>
 
 </div>
@@ -35,13 +37,13 @@
     
 <script>
 import Sidebar from "./../Sidebar.vue";
-import ContactForm from "./../Forms/ContactForm.vue";
+import TagForm from "./../Forms/TagForm.vue";
 
 export default {
     name: "Contacts",
     components: {
         Sidebar,
-        ContactForm
+        TagForm
     },
     data() {
         return {
@@ -55,9 +57,9 @@ export default {
         };
     },
     methods: {
-        openAddContactModal() {
+        openAddTagModal() {
 
-            this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.tagForm.showModal(); // Call showModal() method in ContactForm
         },
         editContact(index) {
             // Implement your edit logic here
@@ -72,12 +74,26 @@ export default {
 </script>
 
     
-<style>
-.main-content {
-    position: absolute;
-    right: 200px;
-    top: 50px;
+<style scoped>
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Center horizontally */
+    height: 300px;
+    margin-left:200px;
+     /* Ensure full viewport height */
 }
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    flex: 1; /* Take up remaining height */
+    padding: 10px; /* Add padding for spacing */
+
+}
+
 
 .contact-table {
     width: 100%;
@@ -118,11 +134,23 @@ button.delete-button {
     float: right;
     margin-top: 15px;
     margin-bottom: 5px;
-    background-color: #2196f3;
+    background-color: #7745D6;
     color: white;
     border: none;
     border-radius: 4px;
     padding: 6px 12px;
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack sidebar and main content on small screens */
+    }
+
+    .main-content {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
 }
 </style>

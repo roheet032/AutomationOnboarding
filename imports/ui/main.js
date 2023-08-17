@@ -13,7 +13,6 @@ Meteor.startup(() => {
   const app = createApp(App)
   app.use(router)
   app.use(VueMeteor)
-
   app.mount('#app')
 
 })

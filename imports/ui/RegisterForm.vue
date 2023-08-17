@@ -45,9 +45,19 @@ import {
 } from "meteor/meteor";
 import {
     RegisterCollection
-} from "../api/RegisterCollection";
+} from "../api/Collection/RegisterCollection";
+
 
 export default {
+    created() {
+    // Subscribe to the 'userData' publication
+    this.userDataSubscription = Meteor.subscribe('userData');
+  },
+
+  destroyed() {
+    // Stop the subscription when the component is destroyed
+    this.userDataSubscription.stop();
+  },
     data() {
         return {
             name: "",
@@ -60,36 +70,39 @@ export default {
     },
 
     methods: {
-        submitForm() {
-            if (this.password !== this.confirmPassword) {
-                alert("Passwords do not match.");
-                return;
+    submitForm() {
+        if (this.password !== this.confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        const userData = {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            role: this.role,
+        };
+
+        // Call your registration API or Meteor method here
+        Meteor.call("users.register", userData, (error, userId) => {
+            if (error) {
+                alert("Email already exists");
+            } else {
+                // Assign the selected role to the registered user
+                RegisterCollection.update(userId, { $set: { role: this.role } });
+
+                alert("Account created successfully!!!");
+                this.$router.push('/login');
+                // Manually redirect to the login page using window.location
+                // window.location.href = '/login'; // Replace with the actual login route
             }
+        });
 
-            // Implement your registration logic here
-            const userData = {
-                name: this.name,
-                email: this.email,
-                password: this.password,
-                role: this.role,
-            };
-
-            // Call your registration API or Meteor method here
-            Meteor.call("users.register", userData, (error, userId) => {
-                if (error) {
-                    alert("Email already exists");
-                } else {
-
-                    alert("Account created successfully!!!");
-                    // Redirect to the dashboard or login page upon successful registration
-                    this.$router.push("/login"); // Replace 'login' with the appropriate route
-                }
-            });
-
-            // Insert user data into the RegisterCollection
-            RegisterCollection.insert(userData);
-        },
+        // Insert user data into the RegisterCollection
+        RegisterCollection.insert(userData);
     },
+},
+
 };
 </script>
 

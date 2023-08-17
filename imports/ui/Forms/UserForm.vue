@@ -1,31 +1,42 @@
 <template>
-<div class="organization-form">
+<div class="user-form">
 
-    <modal v-if="modalVisible" name="addOrganizationModal" :adaptive="true" width="300px" height="420px">
+    <modal v-if="modalVisible" name="addUserModal" :adaptive="true" width="300px" height="420px">
         <div class="form-overlay">
             <div class="form-container">
-                <h2 class="form-title">Add Organization</h2>
+                <h2 class="form-title">Add User</h2>
                 <form @submit.prevent="submitForm">
                     <div class="form-group">
-                        <label for="name">Organization Name:</label>
-                        <input type="text" id="fullName" class="input-field" v-model="formData.name" required />
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" class="input-field" v-model="formData.fullName" required />
                     </div>
                     <div class="form-group">
-                        <label for="email">Organization Email:</label>
+                        <label for="email">User Email:</label>
                         <input type="email" id="email" class="input-field" v-model="formData.email" required />
                     </div>
                     <div class="form-group">
-                        <label for="address">Organization Address:</label>
-                        <input type="address" id="address" class="input-field" v-model="formData.address" required />
+                        <label for="password">User Password:</label>
+                        <input type="password" id="password" class="input-field" v-model="formData.password" required />
                     </div>
                     <div class="form-group">
-                        <label for="phonenumber">Phone Number:</label>
-                        <input type="phonenumber" id="phonenumber" class="input-field" v-model="formData.phonenumber" />
+                        <label for="organization">Organization:</label>
+                        <select id="organization" class="input-field" v-model="formData.organization">
+                           
+                            <option v-for="org in organizations" :key="org" :value="org">{{ org }}</option>
+                        </select>
                     </div>
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select id="role" class="input-field" v-model="formData.role">
+                            
+                            <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+                        </select>
+                    </div>
+
                     <div class="button-group">
 
-                        <!-- <button class="add-button" type="submit">Add</button> -->
-                        <button class="create-button" @click="createOrganization">Create Organization</button>
+                        <button class="add-button" type="submit">Add</button>
+                        <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
 
                     </div>
                 </form>
@@ -37,37 +48,24 @@
 </div>
 </template>
 
-  
 <script>
 export default {
-
-    name: "OrganizationForm",
+    name: "UserForm",
 
     data() {
         return {
             modalVisible: false,
             formData: {
-                name: '',
-                email: '',
-                address: '',
-                phonenumber: ''
-            }
-        };
-    },
-    methods: {
-        showModal() {
-            this.modalVisible = true; // Show the modal
+                fullName: "",
+                email: "",
+                password: "",
+                organization: "",
+                role: ""
 
-        },
-        submitForm() {
-            // Add your form submission logic here
-            console.log('Form submitted:', this.formData);
-            // Clear form fields after submission
-            this.formData.name = '';
-            this.formData.email = '';
-            this.formData.address = '';
-            this.formData.phonenumber = '';
-        }
+            },
+            organizations: ["Organization 1", "Organization 2", "Organization 3"], // example organizations
+            roles: ["Admin", "Coordinator"]
+        };
     },
     methods: {
         showModal() {
@@ -82,23 +80,20 @@ export default {
             // Clear form fields after submission
             this.resetFormData();
         },
-        createOrganization() {
+        cancelForm() {
+            this.modalVisible = false; // Hide the modal
+            this.resetFormData(); // Clear form fields on cancel
+        },
+        cancelFormAndCloseModal() {
             this.modalVisible = false; // Hide the modal
             this.$emit("close-modal"); // Emit event to close background blur
             this.resetFormData(); // Clear form fields on cancel
         },
-        resetFormData() {
-            this.formData.name = '';
-            this.formData.email = '';
-            this.formData.address = '';
-            this.formData.phonenumber = '';
-        }
 
     }
 };
 </script>
 
-  
 <style scoped>
 /*this form-overlay and form-container will show pop up form in center in all type of screen*/
 .form-overlay {
@@ -123,20 +118,6 @@ export default {
     width: 100%;
     padding: 20px;
 }
-
-/* .form-container {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: lightgray;
-  text-align: left;
-  position:fixed;
-  top:70px;
-  bottom: 150px;
-  right:500px;
-  z-index: 99;
-
-} */
 
 .form-title {
     font-size: 22px;
@@ -164,7 +145,8 @@ export default {
     margin-top: 15px;
 }
 
-.create-button {
+.add-button,
+.cancel-button {
     flex: 1;
     padding: 10px;
     border: none;
@@ -185,13 +167,13 @@ export default {
     background-color: #5345a0;
 }
 
-.create-button {
-    background-color: #7745D6;
+.cancel-button {
+    background-color: red;
     color: white;
     margin-top: 10px;
 }
 
-.create-button:hover {
-    background-color: #622cc9;
+.cancel-button:hover {
+    background-color: darkred;
 }
 </style>

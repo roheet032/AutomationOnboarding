@@ -12,7 +12,7 @@
                 <input type="password" id="password" v-model="password" required />
             </div>
             <div class="form-group">
-                <button type="submit" class="loginbtn" v-on:click="redirectToContact"><span class="material-symbols-outlined">login</span>Log In</button><br>
+                <button type="submit" class="loginbtn" v-on:click="redirectToLandingPage"><span class="material-symbols-outlined">login</span>Log In</button><br>
                 <div class="register">Haven't Registered an Organization Yet? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
             </div>
         </form>
@@ -29,6 +29,7 @@ export default {
     return {
       email: '',
       password: '',
+     
     };
   },
 
@@ -37,21 +38,10 @@ export default {
       this.$router.push('./register');
     },
 
-    redirectToContact() {
-      this.$router.push('./contacts');
+    redirectToContactpage() {
+      this.$router.push('./index');
     },
 
-    handleLogin(event) {
-      event.preventDefault();
-      // Call the Meteor.loginWithPassword method to handle user login
-      Meteor.loginWithPassword(this.email, this.password, (error) => {
-        if (error) {
-          alert("Please Enter Valid Email and Password:", error);
-        } else {
-          this.$router.push("./contacts");
-        }
-      });
-    },
     login() {
       const userData = {
         email: this.email,
@@ -63,13 +53,29 @@ export default {
       console.log('Email:', this.email);
       console.log('Password:', this.password);
     },
+
+    handleLogin(event) {
+      event.preventDefault();
+     
+      // Call the Meteor.loginWithPassword method to handle user login
+      Meteor.loginWithPassword(this.email, this.password, (error) => {
+
+        if (error) {
+          alert("Please Enter Valid Email and Password:", error);
+        } else {
+      
+          this.$router.push("./index");
+        }
+      });
+    },
+   
   },
 };
 // Call your login API or Meteor method here
 </script>
 
   
-<style>
+<style scoped>
 .login-container {
     display: flex;
     align-items: center;
@@ -112,7 +118,7 @@ export default {
 
 .loginbtn{
     margin-top:20px;
-    background-color: #7745D6
+    background-color: #7745D6;
 }
 button {
 

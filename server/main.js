@@ -1,9 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
+import { RegisterCollection } from '/imports/api/Collection/RegisterCollection';
 
-
-
-import { RegisterCollection } from '/imports/api/RegisterCollection';
 
 Meteor.publish('userData', function () {
   // Publish the user data without the password field (for security)

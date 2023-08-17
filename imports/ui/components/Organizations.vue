@@ -1,18 +1,20 @@
 <template>
 <div>
     <Sidebar />
-    <div class="main-content">
+    
+    <div class="container">
+        <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button" @click="openAddContactModal">Add Organizations</button>
+                <button class="add-button" @click="openAddOrganizationModal">Add Organizations</button>
                 <table class="contact-table">
                     <thead>
                         <tr>
                             <th>Organization Name</th>
                             <th>Organization Email</th>
+                            <th>Organization Address</th>
                             <th>Phone Number</th>
-                            <th>Company</th>
-                            <th>Role</th>
+                            
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -20,9 +22,8 @@
                         <tr v-for="(contact, index) in contacts" :key="index">
                             <td>{{ contact.orgname }}</td>
                             <td>{{ contact.orgemail }}</td>
+                            <td>{{ contact.orgaddress }}</td>
                             <td>{{ contact.phonenum }}</td>
-                            <td>{{ contact.company }}</td>
-                            <td>{{ contact.role }}</td>
                             <td>
                                 <button class="edit-button" @click="editContact(index)">Edit</button>
                                 <button class="delete-button" @click="deleteContact(index)">Delete</button>
@@ -30,40 +31,40 @@
                         </tr>
                     </tbody>
                 </table>
-                <ContactForm ref="contactForm" />
+                <OrganizationForm ref="organizationForm" @close-modal="isModalOpen = false" />
             </div>
         </modal>
-    </div>
+    </div></div>
 </div>
 </template>
 
   
 <script>
 import Sidebar from "./../Sidebar.vue";
-import ContactForm from "./../Forms/ContactForm.vue";
+import OrganizationForm from "./../Forms/OrganizationForm.vue";
 
 export default {
     name: "Contacts",
     components: {
         Sidebar,
-        ContactForm
+        OrganizationForm
+        
     },
     data() {
         return {
             contacts: [{
                     orgname: "Abc Org",
                     orgemail: "abcorg@gmail.com",
+                    orgaddress:"Madhyapur",
                     phonenum:9851224455,
-                    company: "ABC Corp",
-                    role: "Manager"
                 }
                 // Add more contact objects as needed
             ]
         };
     },
     methods: {
-        openAddContactModal() {
-            this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
+        openAddOrganizationModal() {
+            this.$refs.organizationForm.showModal(); // Call showModal() method in ContactForm
         },
         editContact(index) {
             // Implement your edit logic here
@@ -78,12 +79,26 @@ export default {
 </script>
 
   
-<style>
-.main-content {
-    position: absolute;
-    right: 200px;
-    top: 50px;
+<style scoped>
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Center horizontally */
+    height: 300px;
+    margin-left:200px;
+     /* Ensure full viewport height */
 }
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    flex: 1; /* Take up remaining height */
+    padding: 10px; /* Add padding for spacing */
+
+}
+
 
 .contact-table {
     width: 100%;
@@ -124,11 +139,23 @@ button.delete-button {
     float: right;
     margin-top: 15px;
     margin-bottom: 5px;
-    background-color: #2196f3;
+    background-color:#7745D6;
     color: white;
     border: none;
     border-radius: 4px;
     padding: 6px 12px;
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack sidebar and main content on small screens */
+    }
+
+    .main-content {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
 }
 </style>

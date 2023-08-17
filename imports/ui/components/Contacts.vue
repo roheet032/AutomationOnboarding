@@ -13,8 +13,8 @@
                             <th>Full Name</th>
                             <th>Email</th>
                             <th>Address</th>
-                            <th>Organization</th>
-                            <th>Role</th>
+                            <th>Phone Number</th>
+                            <th>Tags</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -23,8 +23,8 @@
                             <td>{{ contact.fullName }}</td>
                             <td>{{ contact.email }}</td>
                             <td>{{ contact.address }}</td>
-                            <td>{{ contact.organization }}</td>
-                            <td>{{ contact.role }}</td>
+                            <td>{{ contact.phonenumber }}</td>
+                            <td>{{ contact.tags }}</td>
                             <td>
                                 <button class="edit-button" @click="editContact(index)">Edit</button>
                                 <button class="delete-button" @click="deleteContact(index)">Delete</button>
@@ -56,8 +56,8 @@ export default {
                     fullName: "Rohit Johnson",
                     email: "rjohn@example.com",
                     address: "Kathmandu",
-                    organization: "ABC Corp",
-                    role: "Administrator"
+                    phonenumber: "9851224455",
+                    tags: "RD Tag"
                 }
                 // Add more contact objects as needed
             ],
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
     display: flex;
     flex-wrap: wrap;
