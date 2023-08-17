@@ -1,32 +1,37 @@
 import { Meteor } from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
-import { RegisterCollection } from '/imports/api/Collection/RegisterCollection';
+// import { RegisterCollection } from '/imports/api/Collection/RegisterCollection';
 
 
-Meteor.publish('userData', function () {
-  // Publish the user data without the password field (for security)
-  return RegisterCollection.find({}, { fields: { password: 0 } });
+
+Meteor.publish('users', function () {
+  return Meteor.users.find({});
 });
 
-Meteor.methods({
-  'users.register'(userData) {
-    // Check if the user is already registered with this email
-    if (RegisterCollection.findOne({ email: userData.email })) {
-      throw new Meteor.Error('Email already exists');
-    }
+// Meteor.publish('userData', function () {
+//   // Publish the user data without the password field (for security)
+//   return RegisterCollection.find({}, { fields: { password: 0 } });
+// });
 
-    // Create the user account
-    const userId = Accounts.createUser({
-      email: userData.email,
-      password: userData.password,
-    });
+// Meteor.methods({
+//   'users.register'(userData) {
+//     // Check if the user is already registered with this email
+//     if (RegisterCollection.findOne({ email: userData.email })) {
+//       throw new Meteor.Error('Email already exists');
+//     }
 
-    // Insert additional user data into the RegisterCollection
-    RegisterCollection.insert(userData);
+//     // Create the user account
+//     const userId = Accounts.createUser({
+//       email: userData.email,
+//       password: userData.password,
+//     });
 
-    return userId;
-  },
-})
+//     // Insert additional user data into the RegisterCollection
+//     RegisterCollection.insert(userData);
+
+//     return userId;
+//   },
+// })
 
 Meteor.methods({
   'users.login'(userData) {

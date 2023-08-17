@@ -1,10 +1,9 @@
 <template>
-    
 <div>
 
     <div class="topnav">
         <div class="logo">
-            <img  src="keelalogo.png" alt="Keela Logo" >
+            <img src="keelalogo.png" alt="Keela Logo">
         </div>
 
         <div class="right-btn">
@@ -12,51 +11,67 @@
             <button @click="handleLogout" class="btn-logout">Logout</button>
         </div>
     </div>
-    
+
     <div class="sidebar">
-       
+
         <ul>
-            <li><router-link to="/organizations"><span class="material-symbols-outlined">corporate_fare</span>Organizations</router-link></li>
-                <li><router-link to="/contacts"> <span class="material-symbols-outlined">contacts</span>Contacts</router-link></li>
-                <li><router-link to="/tags"><span class="material-symbols-outlined">tag</span>Tags</router-link></li>
-                <li><router-link to="/users"><span class="material-symbols-outlined">group</span>Users</router-link></li>
+            <li v-if="currentUser.role === 'KeelaAdmin'">
+                <router-link to="/organizations"><span class="material-symbols-outlined">corporate_fare</span>Organizations</router-link>
+            </li>
+            <li>
+                <router-link to="/contacts"> <span class="material-symbols-outlined">contacts</span>Contacts</router-link>
+            </li>
+            <li>
+                <router-link to="/tags"><span class="material-symbols-outlined">tag</span>Tags</router-link>
+            </li>
+            <li v-if="currentUser.role !== 'Coordinator'">
+                <router-link to="/users"><span class="material-symbols-outlined">group</span>Users</router-link>
+            </li>
         </ul>
     </div>
-    
+
 </div>
 </template>
 
 <script>
-import {Meteor} from "meteor/meteor"
+import {
+    Meteor
+} from "meteor/meteor"
 
-export default{
-    name:"Sidebar",
-    meteor: {
-    $subscribe: {
-      users: [],
+export default {
+    name: "Sidebar",
+
+    created() {
+        this.getUser();
+
     },
-    currentUser() {
-      return Meteor.user();
-    },
-  },
 
     methods: {
-            handleLogout() {
-                Meteor.logout((error) => {
-                    if (error) {
-                        alert("User cannot logout!!!");
-                    } else {
-                        this.$router.push('/login');
-                    }
-                });
-            },
+        getUser() {
+            const currentUser = Meteor.user();
+            if (currentUser) {
+                this.currentUser = {
+                    // org: currentUser.profile.organizationName,
+                    role: currentUser.profile.role,
+                    // id: currentUser._id,
+                    // orgId: currentUser.profile.organizationId
+                };
+            }
+        },
+        handleLogout() {
+            Meteor.logout((error) => {
+                if (error) {
+                    alert("User cannot logout!!!");
+                } else {
+                    this.$router.push('/login');
+                }
+            });
+        },
 
-   
-        }
     }
 
+}
 </script>
-
 
 <style>
 * {
@@ -112,8 +127,8 @@ ul li:hover a {
     display: none;
 }
 
-.logo{
-    width:140px;
+.logo {
+    width: 140px;
 }
 
 label #btn,
@@ -180,7 +195,7 @@ section {
     justify-content: space-between;
     background: #063146;
     text-align: center;
-    padding:4px;
+    padding: 4px;
 }
 
 /* Style the links inside the navigation bar */
@@ -191,7 +206,7 @@ section {
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-   
+
 }
 
 /* Change the color of links on hover */
@@ -208,7 +223,7 @@ section {
 
 .mr-10 {
     margin-right: 10px;
-    color:white
+    color: white
 }
 
 .btn-logout {
@@ -220,6 +235,4 @@ section {
     font-size: 12px;
     font-weight: bold;
 }
-
-
 </style>

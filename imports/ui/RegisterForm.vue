@@ -40,24 +40,20 @@
 
   
 <script>
-import {
-    Meteor
-} from "meteor/meteor";
-import {
-    RegisterCollection
-} from "../api/Collection/RegisterCollection";
-
+// import {
+//     Meteor
+// } from "meteor/meteor";
 
 export default {
-    created() {
-    // Subscribe to the 'userData' publication
-    this.userDataSubscription = Meteor.subscribe('userData');
-  },
+//     created() {
+//     // Subscribe to the 'userData' publication
+//     this.userDataSubscription = Meteor.subscribe('userData');
+//   },
 
-  destroyed() {
-    // Stop the subscription when the component is destroyed
-    this.userDataSubscription.stop();
-  },
+//   destroyed() {
+//     // Stop the subscription when the component is destroyed
+//     this.userDataSubscription.stop();
+//   },
     data() {
         return {
             name: "",
@@ -79,27 +75,42 @@ export default {
         const userData = {
             name: this.name,
             email: this.email,
-            password: this.password,
-            role: this.role,
+                password: this.password,
+                profile: {
+                    role:this.role
+                },
+                
         };
 
+
+        Accounts.createUser(userData, (error) => {
+                if (error) {
+                    console.log(error.reason);
+                    
+                } else {
+                    console.log(userData)
+                    alert('User created successfully');
+                    this.$router.push({ name: 'login' });
+                }
+            });
+
         // Call your registration API or Meteor method here
-        Meteor.call("users.register", userData, (error, userId) => {
-            if (error) {
-                alert("Email already exists");
-            } else {
-                // Assign the selected role to the registered user
-                RegisterCollection.update(userId, { $set: { role: this.role } });
+        // Meteor.call("users.register", userData, (error, userId) => {
+        //     if (error) {
+        //         alert("Email already exists");
+        //     } else {
+        //         // Assign the selected role to the registered user
+        //         UserCollections.update(userId, { $set: { role: this.role } });
 
-                alert("Account created successfully!!!");
-                this.$router.push('/login');
-                // Manually redirect to the login page using window.location
-                // window.location.href = '/login'; // Replace with the actual login route
-            }
-        });
+        //         alert("Account created successfully!!!");
+        //         this.$router.push('/login');
+        //         // Manually redirect to the login page using window.location
+        //         // window.location.href = '/login'; // Replace with the actual login route
+        //     }
+        // });
 
-        // Insert user data into the RegisterCollection
-        RegisterCollection.insert(userData);
+        // // Insert user data into the RegisterCollection
+        // UserCollections.insert(userData);
     },
 },
 

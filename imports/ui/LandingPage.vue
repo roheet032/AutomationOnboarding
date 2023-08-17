@@ -15,16 +15,16 @@
     <div class="sidebar">
 
         <ul>
-            <li>
+            <li v-if="currentUser.role === 'KeelaAdmin'">
                 <router-link to="/organizations"><span class="material-symbols-outlined">corporate_fare</span>Organizations</router-link>
             </li>
             <li>
                 <router-link to="/contacts"> <span class="material-symbols-outlined">contacts</span>Contacts</router-link>
             </li>
-            <li>
+            <li >
                 <router-link to="/tags"><span class="material-symbols-outlined">tag</span>Tags</router-link>
             </li>
-            <li>
+            <li v-if="currentUser.role !== 'Coordinator'">
                 <router-link to="/users"><span class="material-symbols-outlined">group</span>Users</router-link>
             </li>
         </ul>
@@ -60,31 +60,34 @@ export default {
                 }
             });
         },
-
-        updateUserLoggedInStatus() {
-            // Check if the user is logged in
-            this.userIsLoggedIn = !!Meteor.userId();
-        },
-
-        onUserAuthenticated() {
-            // Called when the user is authenticated (login successful)
-            this.updateUserLoggedInStatus();
-            // Fetch and store the user's role
-            const user = Meteor.user();
-            if (user && user.profile && user.profile.role) {
-                this.userRole = user.profile.role;
-                console.log("User Role:", this.userRole); // Add this line // Adjust the field name if needed
+        getUser() {
+            const currentUser = Meteor.user();
+            if (currentUser) {
+                this.currentUser = {
+                    // org: currentUser.profile.organizationName,
+                    role: currentUser.profile.role,
+                    // id: currentUser._id,
+                    // orgId: currentUser.profile.organizationId
+                };
             }
         },
+
+        // updateUserLoggedInStatus() {
+        //     // Check if the user is logged in
+        //     this.userIsLoggedIn = !!Meteor.userId();
+        // },
+
+   
     },
 
     created() {
-        // Fetch user data and update userRole
-        this.onUserAuthenticated();
+        this.getUser();
+        // // Fetch user data and update userRole
+        // this.onUserAuthenticated();
 
-        // Subscribe to the 'userData' publication
-        this.userDataSubscription = Meteor.subscribe('userData');
-        this.updateUserLoggedInStatus();
+        // // Subscribe to the 'userData' publication
+        // this.userDataSubscription = Meteor.subscribe('users');
+        // this.updateUserLoggedInStatus();
     },
 
     // created() {
