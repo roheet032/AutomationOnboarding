@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="loginbtn" v-on:click="redirectToLandingPage"><span class="material-symbols-outlined">login</span>Log In</button><br>
-                <div class="register">Haven't Registered an Organization Yet? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
+                <div class="register">Haven't Registered Yet? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
             </div>
         </form>
     </div>

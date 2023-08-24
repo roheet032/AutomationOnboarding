@@ -5,7 +5,7 @@
         <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button" @click="openAddContactModal">Add Users</button>
+                <button class="add-button" @click="openAddUserModal">Add Users</button>
                 <table class="contact-table">
                     <thead>
                         <tr>
@@ -62,7 +62,7 @@ export default {
         };
     },
     methods: {
-        openAddContactModal() {
+        openAddUserModal() {
             this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
         },
         editContact(index) {

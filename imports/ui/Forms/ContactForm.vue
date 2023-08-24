@@ -5,7 +5,7 @@
           <div class="form-overlay">
             <div class="form-container">
                 <h2 class="form-title">Add Contact</h2>
-                <form @submit.prevent="submitForm">
+                <form @submit.prevent="handleContact">
                     <div class="form-group">
                         <label for="fullName">Full Name:</label>
                         <input type="text" id="fullName" class="input-field" v-model="formData.fullName" required />
@@ -29,7 +29,7 @@
                     
                     <div class="button-group">
                         
-                          <button class="add-button" type="submit">Add</button>
+                          <button  class="add-button" type="submit"> {{ mode === 'add' ? 'Add' : 'Update' }}</button>
                         <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
                         
                     </div>
@@ -43,13 +43,14 @@
     </div>
 </template>
 
-<script>
+<script> 
+import {Meteor} from 'meteor/meteor'
+import { ContactsCollection } from '../../api/Collection/ContactsCollection'
 export default {
   name: "ContactForm",
-
- 
   data() {
     return {
+      mode: 'edit',
       modalVisible: false,
       formData: {
         fullName: "",
@@ -63,20 +64,71 @@ export default {
   },
   methods: {
     showModal() {
+      this.mode = 'add';
       this.modalVisible = true; // Show the modal
     },
     closeModal() {
       this.modalVisible = false; // Close the modal
     },
-    submitForm() {
-      // Add your form submission logic here
-      console.log("Form submitted:", this.formData);
-      // Clear form fields after submission
-      this.resetFormData();
+    async handleContact() {
+            const userId = Meteor.userId();
+            try {
+                if (this.mode === 'add') {
+                    console.log({ ...this.formData, })
+                    await Meteor.call('contacts.insert', { ...this.formData }, (error) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            alert('Contact Created Successfully');
+                        }
+                    });
+                } else if (this.mode === 'edit') {
+                  console.log(this.formData)
+                    await Meteor.call('contacts.update', {
+                        ...this.formData, 
+                    }, (error) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            alert('Contact Updated Successfully');
+                        }
+                    });
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+            this.closeModal();
+        },
+    // async submitForm() {
+    //   await Meteor.call('contacts.insert', this.formData, (error) => {
+    //     if (error) {
+    //       console.error('Insert error:', error);
+    //     } 
+    //       else {
+    //       this.$emit('contact-added'); 
+    //       this.clearForm();
+    //     }
+    //   });
+    //   this.closeModal()
+    // },
+    clearForm() {
+      this.formData.fullName = "";
+      this.formData.email = "";
+      this.formData.address="";
+      this.formData.phonenumber="";
+      this.formData.tags="";
     },
-    cancelForm() {
-      this.modalVisible = false; // Hide the modal
-      this.resetFormData(); // Clear form fields on cancel
+    deleteContact(){
+      if(this.contact._id){
+        if (this.contact._id) {
+        Meteor.call('contacts.remove', this.contact._id, (error) => {
+          if (error) {
+            console.error('Delete error:', error);
+          }
+        });
+      }
+    }
+      
     },
     cancelFormAndCloseModal() {
       this.modalVisible = false; // Hide the modal

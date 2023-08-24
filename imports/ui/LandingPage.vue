@@ -7,7 +7,7 @@
         </div>
 
         <div class="right-btn">
-            <span class="mr-10">Welcome to Keela</span>
+            <span class="mr-10"> Welcome !!<span class="material-symbols-outlined">account_circle</span> {{ currentUser.name }}</span>
             <button @click="handleLogout" class="btn-logout">Logout</button>
         </div>
     </div>
@@ -45,7 +45,7 @@ export default {
     name: "LandingPage",
     data() {
         return {
-            fullname: "",
+            // name: "",
       
         };
     },
@@ -67,7 +67,7 @@ export default {
                     // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
                     // id: currentUser._id,
-                    // orgId: currentUser.profile.organizationId
+                    name: currentUser.profile.name
                 };
             }
         },

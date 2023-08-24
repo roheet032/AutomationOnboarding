@@ -39,6 +39,8 @@
 
   
 <script>
+import { Meteor } from 'meteor/meteor';
+import { OrganizationsCollection } from '../../api/Collection/OrganizationsCollection'
 export default {
 
     name: "OrganizationForm",
@@ -57,43 +59,41 @@ export default {
     methods: {
         showModal() {
             this.modalVisible = true; // Show the modal
-
-        },
-        submitForm() {
-            // Add your form submission logic here
-            console.log('Form submitted:', this.formData);
-            // Clear form fields after submission
-            this.formData.name = '';
-            this.formData.email = '';
-            this.formData.address = '';
-            this.formData.phonenumber = '';
-        }
-    },
-    methods: {
-        showModal() {
-            this.modalVisible = true; // Show the modal
         },
         closeModal() {
             this.modalVisible = false; // Close the modal
         },
-        submitForm() {
-            // Add your form submission logic here
-            console.log("Form submitted:", this.formData);
-            // Clear form fields after submission
-            this.resetFormData();
-        },
-        createOrganization() {
-            this.modalVisible = false; // Hide the modal
-            this.$emit("close-modal"); // Emit event to close background blur
-            this.resetFormData(); // Clear form fields on cancel
-        },
-        resetFormData() {
-            this.formData.name = '';
-            this.formData.email = '';
-            this.formData.address = '';
-            this.formData.phonenumber = '';
+        async submitForm() {
+      await Meteor.call('organizations.insert', this.formData, (error) => {
+        if (error) {
+          console.error('Insert error:', error);
+        } 
+          else {
+          this.$emit('organization-added'); 
+          this.clearForm();
         }
-
+      });
+      this.closeModal()
+    },
+    clearForm() {
+      this.formData.name = "";
+      this.formData.email = "";
+      this.formData.address="";
+      this.formData.phonenumber="";
+    },
+    deleteContact(){
+      if(this.organization._id){
+        if (this.organization._id) {
+        Meteor.call('organizations.remove', this.organization._id, (error) => {
+          if (error) {
+            console.error('Delete error:', error);
+          }
+        });
+      }
+    }
+      
+    },
+      
     }
 };
 </script>

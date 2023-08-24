@@ -19,19 +19,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(contact, index) in contacts" :key="index">
-                            <td>{{ contact.orgname }}</td>
-                            <td>{{ contact.orgemail }}</td>
-                            <td>{{ contact.orgaddress }}</td>
-                            <td>{{ contact.phonenum }}</td>
+                        <tr v-for="(organization, index) in organizations" :key="index">
+                            <td>{{ organization.name }}</td>
+                            <td>{{ organization.email }}</td>
+                            <td>{{ organization.address }}</td>
+                            <td>{{ organization.phonenumber }}</td>
                             <td>
-                                <button class="edit-button" @click="editContact(index)">Edit</button>
-                                <button class="delete-button" @click="deleteContact(index)">Delete</button>
+                                <button class="edit-button" @click="">Edit</button>
+                                <button class="delete-button" @click="deleteOrganization(organization._id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <OrganizationForm ref="organizationForm" @close-modal="isModalOpen = false" />
+                <OrganizationForm @organizations-added="handleOrganizationsAdded" ref="organizationForm" @close-modal="isModalOpen = false" />
             </div>
         </modal>
     </div></div>
@@ -42,6 +42,12 @@
 <script>
 import Sidebar from "./../Sidebar.vue";
 import OrganizationForm from "./../Forms/OrganizationForm.vue";
+import {
+    Meteor
+} from 'meteor/meteor';
+import {
+    OrganizationsCollection
+} from '../../api/Collection/OrganizationsCollection'
 
 export default {
     name: "Contacts",
@@ -50,29 +56,46 @@ export default {
         OrganizationForm
         
     },
-    data() {
-        return {
-            contacts: [{
-                    orgname: "Abc Org",
-                    orgemail: "abcorg@gmail.com",
-                    orgaddress:"Madhyapur",
-                    phonenum:9851224455,
-                }
-                // Add more contact objects as needed
-            ]
-        };
+    // data() {
+    //     return {
+    //         contacts: [{
+    //                 orgname: "Abc Org",
+    //                 orgemail: "abcorg@gmail.com",
+    //                 orgaddress:"Madhyapur",
+    //                 phonenum:9851224455,
+    //             }
+    //             // Add more contact objects as needed
+    //         ]
+    //     };
+    // },
+    meteor: {
+        $subscribe: {
+            organizations: []
+        },
+        organizations() {
+            return OrganizationsCollection.find().fetch();
+        }
     },
     methods: {
         openAddOrganizationModal() {
+            this.isModalOpen = true;
             this.$refs.organizationForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.organizationForm.clearForm();
+        },
+
+        handleOrganizationsAdded() {
+            this.isModalOpen = false; // Close the modal after inserting value in form
         },
         editContact(index) {
             // Implement your edit logic here
             console.log("Edit contact at index:", index);
         },
-        deleteContact(index) {
-            // Implement your delete logic here
-            this.contacts.splice(index, 1);
+        deleteOrganization(organizationId) {
+            Meteor.call('organizations.remove', organizationId, (error) => {
+                if (error) {
+                    console.error('Delete error:', error);
+                }
+            });
         }
     }
 };
@@ -96,6 +119,7 @@ export default {
     justify-content: center; /* Center vertically */
     flex: 1; /* Take up remaining height */
     padding: 10px; /* Add padding for spacing */
+    margin-top:60px;
 
 }
 

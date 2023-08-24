@@ -1,17 +1,37 @@
 import { Meteor } from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
-// import { RegisterCollection } from '/imports/api/Collection/RegisterCollection';
 
 
 
-Meteor.publish('users', function () {
-  return Meteor.users.find({});
+import { ContactsCollection } from '../imports/api/Collection/ContactsCollection';
+import '../imports/api/Methods/ContactsMethods'
+
+Meteor.publish('contacts', function publishContacts() {
+ 
+  return ContactsCollection.find();
 });
 
-// Meteor.publish('userData', function () {
-//   // Publish the user data without the password field (for security)
-//   return RegisterCollection.find({}, { fields: { password: 0 } });
-// });
+
+import { OrganizationsCollection } from '../imports/api/Collection/OrganizationsCollection';
+import '../imports/api/Methods/OrganizationMethods'
+
+Meteor.publish('organizations',function publishOrganizations(){
+  return OrganizationsCollection.find();
+})
+
+import { TagsCollection } from '../imports/api/Collection/TagsCollection';
+import '../imports/api/Methods/TagsMethods'
+
+Meteor.publish('tags',function publishTags(){
+  return TagsCollection.find();
+})
+
+//user-role
+
+Meteor.publish('users', function () {
+  return Meteor.users.find();
+});
+
 
 // Meteor.methods({
 //   'users.register'(userData) {

@@ -7,7 +7,7 @@
         </div>
 
         <div class="right-btn">
-            <span class="mr-10">Welcome To Keela</span>
+            <span class="mr-10"> Welcome!!<span class="material-symbols-outlined">account_circle</span> {{ currentUser.name }}</span>
             <button @click="handleLogout" class="btn-logout">Logout</button>
         </div>
     </div>
@@ -53,6 +53,7 @@ export default {
                 this.currentUser = {
                     // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
+                    name: currentUser.profile.name
                     // id: currentUser._id,
                     // orgId: currentUser.profile.organizationId
                 };

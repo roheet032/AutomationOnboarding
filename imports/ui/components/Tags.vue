@@ -15,17 +15,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(contact, index) in contacts" :key="index">
-                            <td>{{ contact.tagName }}</td>
+                        <tr v-for="(tag, index) in tags" :key="index">
+                            <td>{{ tag.tagName }}</td>
                             
                             <td>
                                 <button class="edit-button" @click="editContact(index)">Edit</button>
-                                <button class="delete-button" @click="deleteContact(index)">Delete</button>
+                                <button class="delete-button" @click="deleteTag(tag._id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <TagForm ref="tagForm"  @close-modal="isModalOpen = false" />
+                <TagForm @tags-added="handleTagsAdded"  ref="tagForm"  @close-modal="isModalOpen = false" />
             </div>
         </modal>
     </div>
@@ -38,6 +38,8 @@
 <script>
 import Sidebar from "./../Sidebar.vue";
 import TagForm from "./../Forms/TagForm.vue";
+import { Meteor } from 'meteor/meteor';
+import { TagsCollection } from "../../api/Collection/TagsCollection";
 
 export default {
     name: "Contacts",
@@ -45,29 +47,46 @@ export default {
         Sidebar,
         TagForm
     },
-    data() {
-        return {
-            contacts: [{
+    // data() {
+    //     return {
+    //         contacts: [{
                 
-                    tagName: "Rohit Tag",
+    //                 tagName: "Rohit Tag",
                    
-                }
-                // Add more contact objects as needed
-            ]
-        };
+    //             }
+    //             // Add more contact objects as needed
+    //         ]
+    //     };
+    // },
+    meteor: {
+        $subscribe: {
+            tags: []
+        },
+        tags() {
+            return TagsCollection.find().fetch();
+        }
     },
     methods: {
         openAddTagModal() {
+            this.isModalOpen = true;
+            this.$refs.tagForm.showModal(); // Call showModal() method in TagForm
+            this.$refs.tagForm.clearForm();
 
-            this.$refs.tagForm.showModal(); // Call showModal() method in ContactForm
+           
+        },
+        handleTagsAdded() {
+            this.isModalOpen = false; // Close the modal after inserting value in form
         },
         editContact(index) {
             // Implement your edit logic here
             console.log("Edit contact at index:", index);
         },
-        deleteContact(index) {
-            // Implement your delete logic here
-            this.contacts.splice(index, 1);
+        deleteTag(tagId) {
+            Meteor.call('tags.remove', tagId, (error) => {
+                if (error) {
+                    console.error('Delete error:', error);
+                }
+            });
         }
     }
 };
@@ -91,6 +110,7 @@ export default {
     justify-content: center; /* Center vertically */
     flex: 1; /* Take up remaining height */
     padding: 10px; /* Add padding for spacing */
+    margin:60px;
 
 }
 

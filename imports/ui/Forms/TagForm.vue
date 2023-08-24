@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import {Meteor} from 'meteor/meteor'
+import {TagsCollection} from '../../api/Collection/TagsCollection'
 export default {
     name: "TagForm",
 
@@ -44,25 +46,41 @@ export default {
         closeModal() {
             this.modalVisible = false; // Close the modal
         },
-        submitForm() {
-            // Add your form submission logic here
-            console.log("Form submitted:", this.formData);
-            // Clear form fields after submission
-            this.resetFormData();
+       async submitForm() {
+            await Meteor.call('tags.insert',this.formData,(error)=>{
+                if(error){
+                    console.error('Insert error:',error)
+                }
+                else{
+                    this.$emit('tags-added')
+                    this.clearForm();
+                }
+            })
+            this.closeModal()
         },
-        cancelForm() {
-            this.modalVisible = false; // Hide the modal
-            this.resetFormData(); // Clear form fields on cancel
-        },
+
+        clearForm() {
+      this.formData.tagName = "";
+     
+    },
+
+    deleteContact(){
+      if(this.tag._id){
+        if (this.tag._id) {
+        Meteor.call('tags.remove', this.tag._id, (error) => {
+          if (error) {
+            console.error('Delete error:', error);
+          }
+        });
+      }
+    }
+      
+    },
         cancelFormAndCloseModal() {
             this.modalVisible = false; // Hide the modal
             this.$emit("close-modal"); // Emit event to close background blur
             this.resetFormData(); // Clear form fields on cancel
         },
-        resetFormData() {
-            this.formData.tagName = "";
-      
-        }
     }
 };
 </script>

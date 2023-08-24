@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { RegisterCollection } from './registercollection';
-import { ROLES } from './roles'; // Import roles constants
+
 
 Meteor.methods({
   'users.register': function(userData) {
