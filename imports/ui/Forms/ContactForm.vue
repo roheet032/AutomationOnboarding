@@ -4,7 +4,7 @@
         <modal v-if="modalVisible" name="addContactModal" :adaptive="true" width="300px" height="420px">
           <div class="form-overlay">
             <div class="form-container">
-                <h2 class="form-title">Add Contact</h2>
+                <h2 class="form-title">{{ mode === 'edit' ? 'Edit Contact' : 'Add Contact' }}</h2>
                 <form @submit.prevent="handleContact">
                     <div class="form-group">
                         <label for="fullName">Full Name:</label>
@@ -29,7 +29,7 @@
                     
                     <div class="button-group">
                         
-                          <button  class="add-button" type="submit"> {{ mode === 'add' ? 'Add' : 'Update' }}</button>
+                          <button  class="add-button" type="submit"> {{ mode === 'edit' ? 'Update' : 'Add' }}</button>
                         <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
                         
                     </div>
@@ -50,7 +50,7 @@ export default {
   name: "ContactForm",
   data() {
     return {
-      mode: 'edit',
+      mode: 'add',
       modalVisible: false,
       formData: {
         fullName: "",
@@ -70,26 +70,26 @@ export default {
     closeModal() {
       this.modalVisible = false; // Close the modal
     },
+    populateForm(contact) {
+        this.mode="edit";
+        this.formData = { ...contact }; // Populate the form data with the contact's data
+    },
+    
+
     async handleContact() {
             const userId = Meteor.userId();
             try {
                 if (this.mode === 'add') {
-                    console.log({ ...this.formData, })
                     await Meteor.call('contacts.insert', { ...this.formData }, (error) => {
-                        if (error) {
-                            console.log(error);
-                        } else {
+                        if (!error) {
+                            this.$emit('contact-added');
                             alert('Contact Created Successfully');
                         }
                     });
                 } else if (this.mode === 'edit') {
-                  console.log(this.formData)
-                    await Meteor.call('contacts.update', {
-                        ...this.formData, 
-                    }, (error) => {
-                        if (error) {
-                            console.log(error);
-                        } else {
+                    await Meteor.call('contacts.update', { ...this.formData }, (error) => {
+                        if (!error) {
+                            this.$emit('contact-updated'); // Emit event for successful update
                             alert('Contact Updated Successfully');
                         }
                     });

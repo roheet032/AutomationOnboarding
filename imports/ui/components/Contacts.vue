@@ -14,7 +14,7 @@
                             <th>Address</th>
                             <th>Phone Number</th>
                             <th>Tags</th>
-                            <th>Action</th>
+                            <th v-if="currentUser.role !== 'Coordinator'">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,13 +25,13 @@
                             <td>{{ contact.phonenumber }}</td>
                             <td>{{ contact.tags }}</td>
                             <td>
-                                <button class="edit-button"   @click="openEditContactModal(contact)">Edit</button>
-                                <button class="delete-button" @click="deleteContact(contact._id)">Delete</button>
+                                <button class="edit-button" v-if="currentUser.role !== 'Coordinator'"  @click="openEditContactModal(contact)">Edit</button>
+                                <button class="delete-button" v-if="currentUser.role !== 'Coordinator'" @click="deleteContact(contact._id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <ContactForm @contact-added="handleContactAdded" ref="contactForm" @close-modal="isModalOpen = false" />
+                <ContactForm  @contact-added="handleContactAdded" @contact-updated="handleContactUpdated" ref="contactForm" @close-modal="isModalOpen = false" />
             </div>
         </modal>
     </div>
@@ -55,6 +55,7 @@ export default {
         Sidebar,
         ContactForm
     },
+
     // data() {
     //     return {
     //         contacts: [{
@@ -88,19 +89,22 @@ export default {
 
         },
         openEditContactModal(contact) {
-            this.mode="edit";
             this.isModalOpen = true;
+            this.$refs.contactForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
             this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
-            this.$refs.formData = { ...formData }; //put database data into form 
+            this.$refs.contactForm.populateForm(contact);
+            //put database data into form 
 
         },
         handleContactAdded() {
             this.isModalOpen = false; // Close the modal after inserting value in form
         },
-        // editContact(contact) {
-        //     // Implement your edit logic here
-        //     console.log("Edit contact at index:", contact);
-        // },
+
+        handleContactUpdated(){
+            this.isModalOpen = false; // Close the modal
+            this.$refs.contactForm.clearForm(); // Clear the form
+
+        },
         deleteContact(contactId) {
             Meteor.call('contacts.remove', contactId, (error) => {
                 if (error) {

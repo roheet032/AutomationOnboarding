@@ -5,8 +5,14 @@ Meteor.methods({
     'organizations.insert'(organizationsData) {
       OrganizationsCollection.insert(organizationsData);
     },
-    'organizations.update'(organizationId, updatedData) {
-      OrganizationsCollection.update(organizationId, { $set: updatedData });
+    
+    'organizations.update'(organization) {
+
+      OrganizationsCollection.update(organization._id, {
+        $set: {
+          ...organization,
+        }
+      })
     },
     'organizations.remove'(organizationId) {
       OrganizationsCollection.remove(organizationId);

@@ -8,7 +8,6 @@ Meteor.methods({
 
 
     'contacts.update'(contact) {
-      //ContactsCollection.update(contactId, { $set: updatedData });
       ContactsCollection.update(contact._id, {
         $set: {
           ...contact,

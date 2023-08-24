@@ -19,13 +19,13 @@
                             <td>{{ tag.tagName }}</td>
                             
                             <td>
-                                <button class="edit-button" @click="editContact(index)">Edit</button>
+                                <button class="edit-button" @click="openEditTagModal(tag)">Edit</button>
                                 <button class="delete-button" @click="deleteTag(tag._id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <TagForm @tags-added="handleTagsAdded"  ref="tagForm"  @close-modal="isModalOpen = false" />
+                <TagForm @tags-added="handleTagsAdded" @tags-updated="handleTagsUpdated"  ref="tagForm"  @close-modal="isModalOpen = false" />
             </div>
         </modal>
     </div>
@@ -74,13 +74,22 @@ export default {
 
            
         },
+        openEditTagModal(tag) {
+            this.isModalOpen = true;
+            this.$refs.tagForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
+            this.$refs.tagForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.tagForm.populateForm(tag);
+            //put database data into form 
+
+        },
         handleTagsAdded() {
             this.isModalOpen = false; // Close the modal after inserting value in form
         },
-        editContact(index) {
-            // Implement your edit logic here
-            console.log("Edit contact at index:", index);
+        handleTagsUpdated(){
+            this.isModalOpen = false; // Close the modal
+            this.$refs.tagForm.clearForm(); // Clear the form
         },
+       
         deleteTag(tagId) {
             Meteor.call('tags.remove', tagId, (error) => {
                 if (error) {

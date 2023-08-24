@@ -25,13 +25,13 @@
                             <td>{{ organization.address }}</td>
                             <td>{{ organization.phonenumber }}</td>
                             <td>
-                                <button class="edit-button" @click="">Edit</button>
+                                <button class="edit-button" @click="openEditOrganizationModal(organization)">Edit</button>
                                 <button class="delete-button" @click="deleteOrganization(organization._id)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <OrganizationForm @organizations-added="handleOrganizationsAdded" ref="organizationForm" @close-modal="isModalOpen = false" />
+                <OrganizationForm @organizations-added="handleOrganizationsAdded"  @organizations-updated="handleOrganizationsUpdated" ref="organizationForm" @close-modal="isModalOpen = false" />
             </div>
         </modal>
     </div></div>
@@ -86,9 +86,18 @@ export default {
         handleOrganizationsAdded() {
             this.isModalOpen = false; // Close the modal after inserting value in form
         },
-        editContact(index) {
-            // Implement your edit logic here
-            console.log("Edit contact at index:", index);
+
+        handleOrganizationsUpdated(){
+            this.isModalOpen = false; // Close the modal
+            this.$refs.organizationForm.clearForm(); // Clear the form
+        },
+        openEditOrganizationModal(contact) {
+            this.isModalOpen = true;
+            this.$refs.organizationForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
+            this.$refs.organizationForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.organizationForm.populateForm(contact);
+            //put database data into form 
+
         },
         deleteOrganization(organizationId) {
             Meteor.call('organizations.remove', organizationId, (error) => {

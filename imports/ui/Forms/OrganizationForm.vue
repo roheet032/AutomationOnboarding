@@ -4,8 +4,8 @@
     <modal v-if="modalVisible" name="addOrganizationModal" :adaptive="true" width="300px" height="420px">
         <div class="form-overlay">
             <div class="form-container">
-                <h2 class="form-title">Add Organization</h2>
-                <form @submit.prevent="submitForm">
+                <h2 class="form-title">{{ mode === 'edit' ? 'Edit Organization' : 'Add Organization' }}</h2>
+                <form @submit.prevent="handleOrganization">
                     <div class="form-group">
                         <label for="name">Organization Name:</label>
                         <input type="text" id="fullName" class="input-field" v-model="formData.name" required />
@@ -25,7 +25,7 @@
                     <div class="button-group">
 
                         <!-- <button class="add-button" type="submit">Add</button> -->
-                        <button class="create-button" @click="createOrganization">Create Organization</button>
+                        <button class="create-button" @click="createOrganization">{{ mode === 'edit' ? 'Update Organization' : 'Add Organization' }}</button>
 
                     </div>
                 </form>
@@ -47,6 +47,7 @@ export default {
 
     data() {
         return {
+            mode:"add",
             modalVisible: false,
             formData: {
                 name: '',
@@ -58,23 +59,39 @@ export default {
     },
     methods: {
         showModal() {
+            this.mode='add',
             this.modalVisible = true; // Show the modal
         },
         closeModal() {
             this.modalVisible = false; // Close the modal
         },
-        async submitForm() {
-      await Meteor.call('organizations.insert', this.formData, (error) => {
-        if (error) {
-          console.error('Insert error:', error);
-        } 
-          else {
-          this.$emit('organization-added'); 
-          this.clearForm();
-        }
-      });
-      this.closeModal()
+        populateForm(organization) {
+        this.mode="edit";
+        this.formData = { ...organization }; // Populate the form data with the contact's data
     },
+    async handleOrganization() {
+            const userId = Meteor.userId();
+            try {
+                if (this.mode === 'add') {
+                    await Meteor.call('organizations.insert', { ...this.formData }, (error) => {
+                        if (!error) {
+                            this.$emit('organization-added');
+                            alert('Organization Created Successfully');
+                        }
+                    });
+                } else if (this.mode === 'edit') {
+                    await Meteor.call('organizations.update', { ...this.formData }, (error) => {
+                        if (!error) {
+                            this.$emit('organization-updated'); // Emit event for successful update
+                            alert('Contact Updated Successfully');
+                        }
+                    });
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+            this.closeModal();
+        },
     clearForm() {
       this.formData.name = "";
       this.formData.email = "";

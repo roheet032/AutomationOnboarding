@@ -5,9 +5,14 @@ Meteor.methods({
     'tags.insert'(formData) {
       TagsCollection.insert(formData);
     },
-    'tags.update'(tagId, updatedData) {
-      TagsCollection.update(tagId, { $set: updatedData });
+    'tags.update'(tag) {
+      TagsCollection.update(tag._id, {
+        $set: {
+          ...tag,
+        }
+      })
     },
+    
     'tags.remove'(tagId) {
       TagsCollection.remove(tagId);
     },

@@ -4,15 +4,15 @@
     <modal v-if="modalVisible" name="addTagModal" :adaptive="true" width="300px" height="420px">
         <div class="form-overlay">
             <div class="form-container">
-                <h2 class="form-title">New Tag</h2>
-                <form @submit.prevent="submitForm">
+                <h2 class="form-title">{{ mode === 'edit' ? 'Edit Tag' : 'Add Tag' }}</h2>
+                <form @submit.prevent="handleTag">
                     <div class="form-group">
                         <label for="tagName">Tag Name:</label>
                         <input type="text" id="tagName" class="input-field" v-model="formData.tagName" required />
                     </div>
                     <div class="button-group">
 
-                        <button class="add-button" type="submit">Add</button>
+                        <button class="add-button" type="submit">{{ mode === 'edit' ? 'Update' : 'Add' }}</button>
                         <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
 
                     </div>
@@ -33,6 +33,7 @@ export default {
 
     data() {
         return {
+            mode:'add',
             modalVisible: false,
             formData: {
                 tagName: "",  
@@ -41,22 +42,38 @@ export default {
     },
     methods: {
         showModal() {
+            this.mode='add',
             this.modalVisible = true; // Show the modal
         },
         closeModal() {
             this.modalVisible = false; // Close the modal
         },
-       async submitForm() {
-            await Meteor.call('tags.insert',this.formData,(error)=>{
-                if(error){
-                    console.error('Insert error:',error)
+        populateForm(tag) {
+        this.mode="edit";
+        this.formData = { ...tag }; // Populate the form data with the contact's data
+    },
+    async handleTag() {
+            const userId = Meteor.userId();
+            try {
+                if (this.mode === 'add') {
+                    await Meteor.call('tags.insert', { ...this.formData }, (error) => {
+                        if (!error) {
+                            this.$emit('tags-added');
+                            alert('Tag Created Successfully');
+                        }
+                    });
+                } else if (this.mode === 'edit') {
+                    await Meteor.call('tags.update', { ...this.formData }, (error) => {
+                        if (!error) {
+                            this.$emit('tags-updated'); // Emit event for successful update
+                            alert('Contact Updated Successfully');
+                        }
+                    });
                 }
-                else{
-                    this.$emit('tags-added')
-                    this.clearForm();
-                }
-            })
-            this.closeModal()
+            } catch (error) {
+                alert(error.message);
+            }
+            this.closeModal();
         },
 
         clearForm() {
