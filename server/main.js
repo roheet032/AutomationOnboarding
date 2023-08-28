@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
-
+import '../imports/api/Methods/UserMethods'
 
 
 import { ContactsCollection } from '../imports/api/Collection/ContactsCollection';
@@ -27,8 +27,10 @@ Meteor.publish('tags',function publishTags(){
 })
 
 //user-role
+// import '../imports/api/Methods/UserMethods'
 
-Meteor.publish('users', function () {
+
+Meteor.publish('users', function publishUsers() {
   return Meteor.users.find();
 });
 

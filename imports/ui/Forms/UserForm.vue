@@ -4,38 +4,38 @@
     <modal v-if="modalVisible" name="addUserModal" :adaptive="true" width="300px" height="420px">
         <div class="form-overlay">
             <div class="form-container">
-                <h2 class="form-title">Add User</h2>
-                <form @submit.prevent="submitForm">
+                <h2 class="form-title">{{ mode === 'edit' ? 'Edit User' : 'Add User' }}</h2>
+                <form @submit.prevent="handleUser">
                     <div class="form-group">
-                        <label for="fullName">Full Name:</label>
-                        <input type="text" id="fullName" class="input-field" v-model="formData.fullName" required />
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" class="input-field" v-model="formData.name" required />
                     </div>
-                    <div class="form-group">
+                    <div v-if="mode !== 'edit'" class="form-group">
                         <label for="email">User Email:</label>
                         <input type="email" id="email" class="input-field" v-model="formData.email" required />
                     </div>
-                    <div class="form-group">
+                    <div v-if="mode !== 'edit'" class="form-group">
                         <label for="password">User Password:</label>
                         <input type="password" id="password" class="input-field" v-model="formData.password" required />
                     </div>
-                    <div class="form-group">
+                    <div v-if="mode !== 'edit'"  class="form-group">
                         <label for="organization">Organization:</label>
-                        <select id="organization" class="input-field" v-model="formData.organization">
-                           
-                            <option v-for="org in organizations" :key="org" :value="org">{{ org }}</option>
+                        <select id="organization" class="input-field" v-model="formData.organizationId">
+
+                            <option v-for="org in organizationsList" :key="org" :value="org">{{ org }}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="role">Role:</label>
                         <select id="role" class="input-field" v-model="formData.role">
-                            
+
                             <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
                         </select>
                     </div>
 
                     <div class="button-group">
 
-                        <button class="add-button" type="submit">Add</button>
+                        <button class="add-button" type="submit">{{ mode === 'edit' ? 'Update' : 'Add' }}</button>
                         <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
 
                     </div>
@@ -49,49 +49,165 @@
 </template>
 
 <script>
+import {
+    Meteor
+} from "meteor/meteor"
 export default {
     name: "UserForm",
 
     data() {
         return {
+            mode: 'add',
             modalVisible: false,
             formData: {
-                fullName: "",
+                name: "",
                 email: "",
                 password: "",
-                organization: "",
+                organizationId: "",
                 role: ""
 
             },
-            organizations: ["Organization 1", "Organization 2", "Organization 3"], // example organizations
+            organizationsList: [],
+            // organizations: ["Organization 1", "Organization 2", "Organization 3"], // example organizations
             roles: ["Admin", "Coordinator"]
         };
     },
+  
     methods: {
-        showModal() {
-            this.modalVisible = true; // Show the modal
+    
+    showModal() {
+      this.modalVisible = true;
+    },
+    closeModal() {
+      this.modalVisible = false;
+    },
+    populateForm(user) {
+      this.mode = "edit";
+      this.formData = {
+        _id: user._id,
+        name: user.profile.name,
+        role: user.profile.role
+      };
+    },
+    async handleUser() {
+      try {
+        if (this.mode === "add") {
+          await Meteor.call("users.insert", this.formData);
+          this.$emit("users-added");
+          alert("User Created Successfully");
+        } else if (this.mode === "edit") {
+            await Meteor.call('users.update', {
+         _id: this.formData._id,
+        profile: {
+          name: this.formData.name,
+          role: this.formData.role,
+          organizationId:this.organizationId
+          // Add any other profile fields you need to update
         },
-        closeModal() {
-            this.modalVisible = false; // Close the modal
-        },
-        submitForm() {
-            // Add your form submission logic here
-            console.log("Form submitted:", this.formData);
-            // Clear form fields after submission
-            this.resetFormData();
-        },
-        cancelForm() {
-            this.modalVisible = false; // Hide the modal
-            this.resetFormData(); // Clear form fields on cancel
-        },
-        cancelFormAndCloseModal() {
-            this.modalVisible = false; // Hide the modal
-            this.$emit("close-modal"); // Emit event to close background blur
-            this.resetFormData(); // Clear form fields on cancel
-        },
-
+    });
+          this.$emit("users-updated");
+          alert("User Updated Successfully");
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+      this.closeModal();
+    },
+    clearForm() {
+      this.formData.name = "";
+      this.formData.email = "";
+      this.formData.password = "";
+      this.formData.organization = "";
+      this.formData.role = "";
+    },
+    // getUser() {
+    //         const currentUser = Meteor.user();
+    //         if (currentUser) {
+    //             this.currentUser = {
+    //                 // org: currentUser.profile.organizationName,
+    //                 role: currentUser.profile.role,
+    //                 name:currentUser.profile.name,
+    //                 id: currentUser._id,
+    //                 // orgId: currentUser.profile.organizationId
+    //             };
+    //         }
+    //     },
+    cancelFormAndCloseModal() {
+      this.modalVisible = false;
+      this.$emit("close-modal");
+      this.clearForm();
     }
+  }
 };
+//     methods: {
+//         showModal() {
+//             this.modalVisible = true; // Show the modal
+//         },
+//         closeModal() {
+//             this.modalVisible = false; // Close the modal
+//         },
+//         populateForm(user) {
+//             this.mode = "edit";
+//             this.formData = {
+//                 ...user,
+//                 // ...user.profile,
+//                 // email: user.emails[0].address
+//             }; // Populate the form data with the user's data
+//         },
+  
+//         async handleUser() {
+//             const userId = Meteor.userId();
+//             try {
+//                 if (this.mode === 'add') {
+//                     console.log(this.formData)
+//                     await Meteor.call('users.insert', { ...this.formData }, (error) => {
+//                         if (!error) {
+//                             this.$emit('users-added');
+//                             alert('User Created Successfully');
+//                         }
+//                     });
+//                 } else if (this.mode === 'edit') {
+//                     console.log(this.formData)
+//                     await Meteor.call('users.update', { ...this.formData }, (error) => {
+//                         if (!error) {
+//                             this.$emit('users-updated'); // Emit event for successful update
+//                             alert('Users Updated Successfully');
+//                         }
+//                     });
+//                 }
+//             } catch (error) {
+//                 alert(error.message);
+//             }
+//             this.closeModal();
+//         },
+
+//         clearForm() {
+//             this.formData.fullName = "";
+//             this.formData.email = "";
+//             this.formData.password = "";
+//             this.formData.organization = "";
+//             this.formData.role = "";
+//         },
+//         deleteUser() {
+//             if (this.user._id) {
+//                 if (this.user._id) {
+//                     Meteor.call('users.remove', this.user._id, (error) => {
+//                         if (error) {
+//                             console.error('Delete error:', error);
+//                         }
+//                     });
+//                 }
+//             }
+
+//         },
+//         cancelFormAndCloseModal() {
+//             this.modalVisible = false; // Hide the modal
+//             this.$emit("close-modal"); // Emit event to close background blur
+//             this.resetFormData(); // Clear form fields on cancel
+//         },
+
+//     }
+// };
 </script>
 
 <style scoped>

@@ -24,7 +24,7 @@
                             <td>{{ contact.address }}</td>
                             <td>{{ contact.phonenumber }}</td>
                             <td>{{ contact.tags }}</td>
-                            <td>
+                            <td v-if="currentUser.role !== 'Coordinator'">
                                 <button class="edit-button" v-if="currentUser.role !== 'Coordinator'"  @click="openEditContactModal(contact)">Edit</button>
                                 <button class="delete-button" v-if="currentUser.role !== 'Coordinator'" @click="deleteContact(contact._id)">Delete</button>
                             </td>
@@ -80,8 +80,7 @@ export default {
     },
 
     methods: {
-        
-
+    
         openAddContactModal() {
             this.isModalOpen = true;
             this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm

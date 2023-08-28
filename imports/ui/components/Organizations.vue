@@ -50,7 +50,7 @@ import {
 } from '../../api/Collection/OrganizationsCollection'
 
 export default {
-    name: "Contacts",
+    name: "Organizations",
     components: {
         Sidebar,
         OrganizationForm

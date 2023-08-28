@@ -5,7 +5,7 @@ import { RegisterCollection } from './registercollection';
 
 Meteor.methods({
   'users.register': function(userData) {
-    // Validation and registration logic here
+    
 
     const userId = Accounts.createUser({
       email: userData.email,

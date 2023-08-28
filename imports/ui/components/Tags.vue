@@ -42,7 +42,7 @@ import { Meteor } from 'meteor/meteor';
 import { TagsCollection } from "../../api/Collection/TagsCollection";
 
 export default {
-    name: "Contacts",
+    name: "Tags",
     components: {
         Sidebar,
         TagForm

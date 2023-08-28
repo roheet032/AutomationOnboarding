@@ -44,15 +44,7 @@
 // } from "meteor/meteor";
 
 export default {
-    //     created() {
-    //     // Subscribe to the 'userData' publication
-    //     this.userDataSubscription = Meteor.subscribe('userData');
-    //   },
 
-    //   destroyed() {
-    //     // Stop the subscription when the component is destroyed
-    //     this.userDataSubscription.stop();
-    //   },
     data() {
         return {
             name: "",
@@ -60,6 +52,7 @@ export default {
             password: "",
             confirmPassword: "",
             role: "",
+            organizationId:"",
             roles: ["Admin", "Coordinator", "KeelaAdmin"],
         };
     },
@@ -78,6 +71,7 @@ export default {
                 profile: {
                     role: this.role,
                     name: this.name,
+                    organizationId:this.organizationId
                 },
 
             };

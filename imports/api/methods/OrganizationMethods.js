@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor'
 import { OrganizationsCollection } from '../Collection/OrganizationsCollection'
 
 Meteor.methods({
-    'organizations.insert'(organizationsData) {
-      OrganizationsCollection.insert(organizationsData);
+    'organizations.insert'(formData) {
+      OrganizationsCollection.insert(formData);
     },
     
     'organizations.update'(organization) {

@@ -3,102 +3,162 @@
     <Sidebar />
     <div class="container">
         <div class="main-content">
-        <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
-            <div class="addContactModal">
-                <button class="add-button" @click="openAddUserModal">Add Users</button>
-                <table class="contact-table">
-                    <thead>
-                        <tr>
-                            <th>Full Name</th>
-                            <th>User Email</th>
-                            <th>Organization</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(contact, index) in contacts" :key="index">
-                            <td>{{ contact.name }}</td>
-                            <td>{{ contact.email }}</td>
-                            <td>{{ contact.organization }}</td>
-                            <td>{{ contact.role }}</td>
-                            <td>
-                                <button class="edit-button" @click="editContact(index)">Edit</button>
-                                <button class="delete-button" @click="deleteContact(index)">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <UserForm ref="userForm" @close-modal="isModalOpen = false" />
-            </div>
-        </modal>
+            <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
+                <div class="addContactModal">
+                    <button class="add-button" @click="openAddUserModal">Add Users</button>
+                    <table class="contact-table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>User Email</th>
+                                <th>Organization</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(user, index) in users" :key="index">
+                                <td>{{ user.profile.name }}</td>
+                                <td>{{ user.emails[0].address }}</td>
+                                <td>{{ user.organizations }}</td>
+                                <td>{{ user.profile.role }}</td>
+                                <td v-if="user.profile.role !=='KeelaAdmin'">
+                                    <button class="edit-button"   @click="openEditUserModal(user)">Edit</button>
+                                    <button class="delete-button"  @click="deleteUser(user._id)">Delete</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <UserForm @users-added="handleUserAdded" @users-updated="handleUserUpdated" ref="userForm" @close-modal="isModalOpen = false" />
+                </div>
+            </modal>
+        </div>
     </div>
-    </div>
-    
+
 </div>
 </template>
 
-  
 <script>
 import Sidebar from "./../Sidebar.vue";
 import UserForm from "./../Forms/UserForm.vue";
+import {
+    Meteor
+} from "meteor/meteor";
 
 export default {
-    name: "Contacts",
+    name: "Users",
     components: {
         Sidebar,
         UserForm
     },
-    data() {
-        return {
-            contacts: [{
-                    name: "Rohit",
-                    email: "rohit@gmail.com",
-                    organization:"RD organization",
-                    role: "Admin"
-                }
-                // Add more contact objects as needed
-            ]
-        };
+    meteor: {
+        $subscribe: {
+            users: [],
+        },
+        users() {
+            return Meteor.users.find().fetch();
+        },
+
     },
+    
     methods: {
-        openAddUserModal() {
-            this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
-        },
-        editContact(index) {
-            // Implement your edit logic here
-            console.log("Edit contact at index:", index);
-        },
-        deleteContact(index) {
-            // Implement your delete logic here
-            this.contacts.splice(index, 1);
+
+        canEditDeleteUser(user) {
+        // Check if the logged-in user is KeelaAdmin, and if they are, return false
+        if (this.currentUser.role === 'KeelaAdmin') {
+            return false;
         }
-    }
+        // Otherwise, allow editing and deletion for other users
+        return true;
+    },
+
+        openAddUserModal() {
+            this.isModalOpen = true;
+            this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.userForm.clearForm();
+        },
+        openEditUserModal(user) {
+            this.isModalOpen = true;
+            this.$refs.userForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
+            this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.userForm.populateForm(user);
+            //put database data into form 
+
+        },
+        handleUserAdded() {
+            this.isModalOpen = false; // Close the modal after inserting value in form
+        },
+
+        handleUserUpdated() {
+            this.isModalOpen = false; // Close the modal
+            this.$refs.userForm.clearForm(); // Clear the form
+
+        },
+       
+        deleteUser(userId) {
+            Meteor.call("deleteUser", userId, (error) => {
+                if (error) {
+                    console.error("Delete error:", error);
+                }
+            });
+        },
+        getUser() {
+            const currentUser = Meteor.user();
+            if (currentUser) {
+                this.currentUser = {
+                    // org: currentUser.profile.organizationName,
+                    role: currentUser.profile.role,
+                    // id: currentUser._id,
+                    name: currentUser.profile.name
+                };
+            }
+        },
+        
+    },
+    created() {
+        this.getUser();
+      
+    },
+        //     Meteor.call('users.remove', userId, (error) => {
+        //         if (error) {
+        //             console.error('Delete error:', error);
+        //         }
+        //     });
+        // },
+    
+    //     created() {
+    //     // Fetch initial user data when the component is created
+    //     this.user = Meteor.users.find().fetch();
+    //   }
 };
 </script>
 
-  
 <style scoped>
-
 .container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Center horizontally */
+    justify-content: space-between;
+    /* Center horizontally */
     height: 300px;
-    margin-left:200px;
-     /* Ensure full viewport height */
+    margin-left: 200px;
+    /* Ensure full viewport height */
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
-    flex: 1; /* Take up remaining height */
-    padding: 10px; /* Add padding for spacing */
+    align-items: center;
+    /* Center horizontally */
+    justify-content: center;
+    /* Center vertically */
+    flex: 1;
+    /* Take up remaining height */
+    padding: 10px;
+    /* Add padding for spacing */
+    margin:60px;
 
 }
-
 
 .contact-table {
     width: 100%;
@@ -139,7 +199,7 @@ button.delete-button {
     float: right;
     margin-top: 15px;
     margin-bottom: 5px;
-    background-color:#7745D6;
+    background-color: #7745D6;
     color: white;
     border: none;
     border-radius: 4px;
@@ -149,7 +209,8 @@ button.delete-button {
 
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Stack sidebar and main content on small screens */
+        flex-direction: column;
+        /* Stack sidebar and main content on small screens */
     }
 
     .main-content {
