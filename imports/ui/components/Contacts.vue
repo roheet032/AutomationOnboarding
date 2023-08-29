@@ -4,9 +4,10 @@
     <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button" v-if="currentUser.role !== 'Coordinator'" @click="openAddContactModal">Add Contact</button>
+                <button class="add-button fixed-add-button" v-if="currentUser.role !== 'Coordinator'" @click="openAddContactModal">Add Contact</button>
                 <div class="contact-table-container" :class="{ 'blur-background': isModalOpen }"></div>
-                <table class="contact-table">
+                <div class="table-container">
+                    <table class="contact-table">
                     <thead>
                         <tr>
                             <th>Full Name</th>
@@ -31,6 +32,8 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
+               
                 <ContactForm  @contact-added="handleContactAdded" @contact-updated="handleContactUpdated" ref="contactForm" @close-modal="isModalOpen = false" />
             </div>
         </modal>
@@ -55,29 +58,29 @@ export default {
         Sidebar,
         ContactForm
     },
-
-    // data() {
-    //     return {
-    //         contacts: [{
-    //                 fullName: "Rohit Johnson",
-    //                 email: "rjohn@example.com",
-    //                 address: "Kathmandu",
-    //                 phonenumber: "9851224455",
-    //                 tags: "RD Tag"
-    //             }
-    //             // Add more contact objects as needed
-    //         ],
-    //         isModalOpen:false,
-    //     };
-    // },
+    data() {
+        return {
+            currentUser: null,
+            isModalOpen: false
+        };
+    },
     meteor: {
         $subscribe: {
             contacts: []
         },
         contacts() {
-            return ContactsCollection.find().fetch();
+        const user = Meteor.user();
+        if (user && user.profile.organizationName) {
+            return ContactsCollection.find({ organizationName: user.profile.organizationName }).fetch();
         }
+        return [];
+    } 
     },
+    //     contacts() {
+    //         return ContactsCollection.find().fetch();
+    //     }
+    // },
+    
 
     methods: {
     
@@ -133,6 +136,27 @@ export default {
 </script>
 
 <style scoped>
+
+.fixed-add-button {
+  position: fixed;
+  top: 90px;
+  right:250px;
+  background-color: #7745D6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 1; /* Ensure it's above the scrollable content */
+}
+
+.table-container {
+  margin-top: 50px; /* Add margin to separate the button and table */
+  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  overflow-y: auto;
+  border: 1px solid #ddd; /* Add a border for separation */
+}
+
 .container {
     display: flex;
     flex-wrap: wrap;

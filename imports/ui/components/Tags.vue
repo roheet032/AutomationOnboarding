@@ -6,8 +6,9 @@
         <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button" @click="openAddTagModal">Create Tag</button>
-                <table class="contact-table">
+                <button class="add-button fixed-add-button" @click="openAddTagModal">Create Tag</button>
+                <div class="tag-container">
+                    <table class="contact-table">
                     <thead>
                         <tr>
                             <th>Tag Name</th>
@@ -24,7 +25,8 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table></div>
+                
                 <TagForm @tags-added="handleTagsAdded" @tags-updated="handleTagsUpdated"  ref="tagForm"  @close-modal="isModalOpen = false" />
             </div>
         </modal>
@@ -47,6 +49,12 @@ export default {
         Sidebar,
         TagForm
     },
+    data() {
+        return {
+            currentUser: null,
+            isModalOpen: false
+        };
+    },
     // data() {
     //     return {
     //         contacts: [{
@@ -63,9 +71,30 @@ export default {
             tags: []
         },
         tags() {
-            return TagsCollection.find().fetch();
+        const user = Meteor.user();
+        if (user && user.profile.organizationName) {
+            return TagsCollection.find({ organizationName: user.profile.organizationName }).fetch();
         }
+        return [];
+    }
+        // tags() {
+        //     if (!this.currentUser) {
+        //         return [];
+        //     }
+
+        //     if (this.currentUser.profile.organizationId) {
+        //         return TagsCollection.find({
+        //             organizationId: this.currentUser.profile.organizationId
+        //         }).fetch();
+        //     }
+
+        //     return [];
+        // }
     },
+    //     tags() {
+    //         return TagsCollection.find().fetch();
+    //     }
+    // },
     methods: {
         openAddTagModal() {
             this.isModalOpen = true;
@@ -96,13 +125,44 @@ export default {
                     console.error('Delete error:', error);
                 }
             });
-        }
+        },
+        getUser() {
+            const currentUser = Meteor.user();
+            if (currentUser) {
+                this.currentUser = {
+                    profile: currentUser.profile
+                };
+            }
+        },
+        created() {
+        this.getUser();
+    },
+
     }
 };
 </script>
 
     
 <style scoped>
+.fixed-add-button {
+  position: fixed;
+  top: 50px;
+  right:600px;
+  background-color: #7745D6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 1; /* Ensure it's above the scrollable content */
+}
+
+.tag-container {
+  margin-top: 50px; /* Add margin to separate the button and table */
+  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  overflow-y: auto;
+  border: 1px solid #ddd; /* Add a border for separation */
+}
 .container {
     display: flex;
     flex-wrap: wrap;

@@ -23,7 +23,13 @@ import { TagsCollection } from '../imports/api/Collection/TagsCollection';
 import '../imports/api/Methods/TagsMethods'
 
 Meteor.publish('tags',function publishTags(){
-  return TagsCollection.find();
+  const currentUser = Meteor.users.findOne(this.userId);
+  if (currentUser.profile.role === 'keelaAdmin') {
+    return TagsCollection.find();
+  } else {
+    return TagsCollection.find({ organizationName: currentUser.profile.organizationName });
+  }
+  //return TagsCollection.find();
 })
 
 //user-role
@@ -34,26 +40,6 @@ Meteor.publish('users', function publishUsers() {
   return Meteor.users.find();
 });
 
-
-// Meteor.methods({
-//   'users.register'(userData) {
-//     // Check if the user is already registered with this email
-//     if (RegisterCollection.findOne({ email: userData.email })) {
-//       throw new Meteor.Error('Email already exists');
-//     }
-
-//     // Create the user account
-//     const userId = Accounts.createUser({
-//       email: userData.email,
-//       password: userData.password,
-//     });
-
-//     // Insert additional user data into the RegisterCollection
-//     RegisterCollection.insert(userData);
-
-//     return userId;
-//   },
-// })
 
 Meteor.methods({
   'users.login'(userData) {
@@ -66,6 +52,23 @@ Meteor.methods({
     return user._id;
   },
 });
+// Defining userData publication directly
+Meteor.publish('userData', function() {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  const currentUser = Meteor.users.findOne(this.userId);
+
+  if (currentUser && currentUser.profile.organizationId) {
+    return Meteor.users.find({
+      'profile.organizationId': currentUser.profile.organizationId,
+    });
+  } else {
+    return this.ready();
+  }
+});
+
 
 Meteor.startup(async () => {
   

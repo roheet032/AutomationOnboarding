@@ -5,8 +5,9 @@
         <div class="main-content">
             <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
                 <div class="addContactModal">
-                    <button class="add-button" @click="openAddUserModal">Add Users</button>
-                    <table class="contact-table">
+                    <button class="add-button fixed-add-button" @click="openAddUserModal">Add Users</button>
+                    <div class="table-container">
+                        <table class="contact-table">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
@@ -18,18 +19,20 @@
                         </thead>
                         <tbody>
                             <tr v-for="(user, index) in users" :key="index">
+                                <td>{{ currentUser }}</td>
                                 <td>{{ user.profile.name }}</td>
                                 <td>{{ user.emails[0].address }}</td>
-                                <td>{{ user.organizations }}</td>
+                                <td>{{ user.profile.organizationName }}</td>
                                 <td>{{ user.profile.role }}</td>
                                 <td v-if="user.profile.role !=='KeelaAdmin'">
                                     <button class="edit-button"   @click="openEditUserModal(user)">Edit</button>
                                     <button class="delete-button"  @click="deleteUser(user._id)">Delete</button>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
+                    </div>
+                    
                     <UserForm @users-added="handleUserAdded" @users-updated="handleUserUpdated" ref="userForm" @close-modal="isModalOpen = false" />
                 </div>
             </modal>
@@ -52,12 +55,19 @@ export default {
         Sidebar,
         UserForm
     },
+    data() {
+        return {
+            currentUser: Meteor.user(),
+            isModalOpen: false
+        };
+    },
     meteor: {
         $subscribe: {
             users: [],
         },
         users() {
-            return Meteor.users.find().fetch();
+            console.log(currentUser)
+            return Meteor.users.find({'profile.organizationId': currentUser.organizationId}).fetch();
         },
 
     },
@@ -110,7 +120,8 @@ export default {
                     // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
                     // id: currentUser._id,
-                    name: currentUser.profile.name
+                    name: currentUser.profile.name,
+                    // organizationId: currentUser.profile.organizationId.name
                 };
             }
         },
@@ -120,21 +131,31 @@ export default {
         this.getUser();
       
     },
-        //     Meteor.call('users.remove', userId, (error) => {
-        //         if (error) {
-        //             console.error('Delete error:', error);
-        //         }
-        //     });
-        // },
-    
-    //     created() {
-    //     // Fetch initial user data when the component is created
-    //     this.user = Meteor.users.find().fetch();
-    //   }
+        
 };
 </script>
 
 <style scoped>
+.fixed-add-button {
+  position: fixed;
+  top: 50px;
+  right:300px;
+  background-color: #7745D6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 1; /* Ensure it's above the scrollable content */
+}
+
+.table-container {
+  margin-top: 50px; /* Add margin to separate the button and table */
+  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  overflow-y: auto;
+  border: 1px solid #ddd; /* Add a border for separation */
+}
+
 .container {
     display: flex;
     flex-wrap: wrap;

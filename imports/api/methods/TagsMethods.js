@@ -2,9 +2,27 @@ import { Meteor } from 'meteor/meteor'
 import { TagsCollection } from '../Collection/TagsCollection'
 
 Meteor.methods({
-    'tags.insert'(formData) {
-      TagsCollection.insert(formData);
-    },
+  'tags.insert'(tagData) {
+    // Check if the user is logged in
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized', 'You are not authorized to perform this action.');
+    }
+
+    const currentUser = Meteor.users.findOne(this.userId);
+
+    // Check if the user's role is keelaAdmin or their organization matches the tag's organization
+    if (currentUser.profile.role === 'keelaAdmin' || tagData.organizationName === currentUser.profile.organizationName) {
+      TagsCollection.insert(tagData);
+    } else {
+      throw new Meteor.Error('not-authorized', 'You are not authorized to perform this action.');
+    }
+  },
+
+
+
+    // 'tags.insert'(formData) {
+    //   TagsCollection.insert(formData);
+    // },
     'tags.update'(tag) {
       TagsCollection.update(tag._id, {
         $set: {

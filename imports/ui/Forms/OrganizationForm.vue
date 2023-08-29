@@ -25,7 +25,9 @@
                     <div class="button-group">
 
                         <!-- <button class="add-button" type="submit">Add</button> -->
-                        <button class="create-button" @click="createOrganization">{{ mode === 'edit' ? 'Update Organization' : 'Add Organization' }}</button>
+                        <button  class="add-button" type="submit"> {{ mode === 'edit' ? 'Update' : 'Add' }}</button>
+                        <button class="cancel-button" @click="cancelFormAndCloseModal">Cancel</button>
+                        <!-- <button class="create-button" @click="createOrganization">{{ mode === 'edit' ? 'Update Organization' : 'Add Organization' }}</button> -->
 
                     </div>
                 </form>
@@ -110,6 +112,11 @@ export default {
     }
       
     },
+    cancelFormAndCloseModal() {
+      this.modalVisible = false; // Hide the modal
+      this.$emit("close-modal"); // Emit event to close background blur
+      this.resetFormData(); // Clear form fields on cancel
+    },
       
     }
 };
@@ -191,24 +198,41 @@ export default {
     transition: background-color 0.3s, color 0.3s;
 }
 
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.add-button,
+.cancel-button {
+  flex:1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
 .add-button {
-    background-color: blue;
-    color: white;
-    margin-right: 15px;
-    /* Adjust the spacing as needed */
+  background-color: blue;
+  color: white;
+  margin-right: 15px; /* Adjust the spacing as needed */
 }
 
 .add-button:hover {
-    background-color: #5345a0;
+  background-color: #5345a0;
 }
 
-.create-button {
-    background-color: #7745D6;
-    color: white;
-    margin-top: 10px;
+.cancel-button {
+  background-color: red;
+  color: white;
+  margin-top:0.5x;
 }
 
-.create-button:hover {
-    background-color: #622cc9;
+.cancel-button:hover {
+  background-color: darkred;
 }
 </style>

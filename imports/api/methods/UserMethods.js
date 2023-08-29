@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { OrganizationsCollection } from '../Collection/OrganizationsCollection'
 
 
 
@@ -11,6 +12,8 @@ Meteor.methods({
       profile: {
         name: userData.name,
         role: userData.role,
+        organizationId:userData.organizationId,
+        organizationName:userData.organizationName
        
       },
     });
@@ -24,6 +27,8 @@ Meteor.methods({
       $set: {
         'profile.name': user.profile.name,
         'profile.role': user.profile.role,
+        'profile.organizationId': user.profile.organizationId,
+        'profile.organizationName':user.profile.organizationName
       }
     });
   },

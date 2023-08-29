@@ -54,9 +54,15 @@ export default {
     },
     async handleTag() {
             const userId = Meteor.userId();
+            const user=Meteor.user();
             try {
                 if (this.mode === 'add') {
-                    await Meteor.call('tags.insert', { ...this.formData }, (error) => {
+                    const newTag = {
+                tagName: this.formData.tagName,
+                organizationName: user.profile.organizationName // Set the organizationName based on the logged-in user
+            };
+
+                    await Meteor.call('tags.insert', newTag, (error) => {
                         if (!error) {
                             this.$emit('tags-added');
                             alert('Tag Created Successfully');
@@ -178,7 +184,7 @@ export default {
 .cancel-button {
     background-color: red;
     color: white;
-    margin-top: 10px;
+    margin-top: 0.5px;
 }
 
 .cancel-button:hover {

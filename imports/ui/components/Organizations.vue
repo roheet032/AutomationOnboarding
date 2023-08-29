@@ -56,18 +56,7 @@ export default {
         OrganizationForm
         
     },
-    // data() {
-    //     return {
-    //         contacts: [{
-    //                 orgname: "Abc Org",
-    //                 orgemail: "abcorg@gmail.com",
-    //                 orgaddress:"Madhyapur",
-    //                 phonenum:9851224455,
-    //             }
-    //             // Add more contact objects as needed
-    //         ]
-    //     };
-    // },
+    
     meteor: {
         $subscribe: {
             organizations: []

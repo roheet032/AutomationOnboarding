@@ -16,14 +16,6 @@ Meteor.methods({
       },
     });
 
-    // // Insert user data into RegisterCollection
-    // RegisterCollection.insert({
-    //   userId: userId,
-    //   email: userData.email,
-    //   role:userData.role
-    //   // ... other fields you want to store
-    // });
-
     return userId;
   },
 });
