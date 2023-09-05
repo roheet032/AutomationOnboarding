@@ -3,7 +3,8 @@ import { ContactsCollection } from '../Collection/ContactsCollection'
 
 Meteor.methods({
     'contacts.insert'(formData) {
-      ContactsCollection.insert(formData);
+      ContactsCollection.insert({
+        ...formData});
     },
 
 

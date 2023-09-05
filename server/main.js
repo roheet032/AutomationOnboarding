@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
 import '../imports/api/Methods/UserMethods'
 
+//publication for Contacts
 
 import { ContactsCollection } from '../imports/api/Collection/ContactsCollection';
 import '../imports/api/Methods/ContactsMethods'
@@ -11,6 +12,7 @@ Meteor.publish('contacts', function publishContacts() {
   return ContactsCollection.find();
 });
 
+//publication for Organization 
 
 import { OrganizationsCollection } from '../imports/api/Collection/OrganizationsCollection';
 import '../imports/api/Methods/OrganizationMethods'
@@ -19,6 +21,8 @@ Meteor.publish('organizations',function publishOrganizations(){
   return OrganizationsCollection.find();
 })
 
+
+//publication for Tags
 import { TagsCollection } from '../imports/api/Collection/TagsCollection';
 import '../imports/api/Methods/TagsMethods'
 
@@ -29,18 +33,62 @@ Meteor.publish('tags',function publishTags(){
   } else {
     return TagsCollection.find({ organizationName: currentUser.profile.organizationName });
   }
-  //return TagsCollection.find();
+  
 })
 
-//user-role
-// import '../imports/api/Methods/UserMethods'
+// publication for users
+Meteor.publish('users', function () {
+  // Check if the user is logged in
+  if (!this.userId) {
+    return this.ready();
+  }
 
+  // Find the current user
+  const currentUser = Meteor.users.findOne(this.userId);
 
-Meteor.publish('users', function publishUsers() {
-  return Meteor.users.find();
+  // Check if the current user has organization information
+  if (currentUser && currentUser.profile && currentUser.profile.organizationId) {
+    const organizationId = currentUser.profile.organizationId;
+
+    if (currentUser.profile.role === 'KeelaAdmin') {
+      // For KeelaAdmin, publish all users without filtering
+      return Meteor.users.find();
+    } else {
+      // For other roles, publish users based on the organization
+      return Meteor.users.find({ 'profile.organizationId': organizationId });
+    }
+  }
+
+  // If no organization data is found, publish an empty cursor
+  return this.ready();
 });
 
 
+
+
+// //publication for users 
+// Meteor.publish('users', function () {
+//   // Check if the user is logged in
+//   if (!this.userId) {
+//     return this.ready();
+//   }
+  
+//   // Find the current user
+//   const currentUser = Meteor.users.findOne(this.userId);
+
+//   // Check if the current user has organization information
+//   if (currentUser && currentUser.profile && currentUser.profile.organizationId) {
+//     const organizationId = currentUser.profile.organizationId;
+
+//     // Publish users based on the organization
+//     return Meteor.users.find({ 'profile.organizationId': organizationId });
+//   }
+
+//   // If no organization data is found, publish an empty cursor
+//   return this.ready();
+// });
+
+//userlogin authentication
 Meteor.methods({
   'users.login'(userData) {
     const user = Meteor.users.findOne({ 'emails.address': userData.email });
@@ -52,22 +100,9 @@ Meteor.methods({
     return user._id;
   },
 });
-// Defining userData publication directly
-Meteor.publish('userData', function() {
-  if (!this.userId) {
-    return this.ready();
-  }
 
-  const currentUser = Meteor.users.findOne(this.userId);
 
-  if (currentUser && currentUser.profile.organizationId) {
-    return Meteor.users.find({
-      'profile.organizationId': currentUser.profile.organizationId,
-    });
-  } else {
-    return this.ready();
-  }
-});
+
 
 
 Meteor.startup(async () => {

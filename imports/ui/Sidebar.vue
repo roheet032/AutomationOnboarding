@@ -18,10 +18,10 @@
             <li v-if="currentUser.role === 'KeelaAdmin'">
                 <router-link to="/organizations"><span class="material-symbols-outlined">corporate_fare</span>Organizations</router-link>
             </li>
-            <li>
+            <li v-if="currentUser.role !== 'KeelaAdmin'">
                 <router-link to="/contacts"> <span class="material-symbols-outlined">contacts</span>Contacts</router-link>
             </li>
-            <li>
+            <li v-if="currentUser.role !== 'KeelaAdmin'">
                 <router-link to="/tags"><span class="material-symbols-outlined">tag</span>Tags</router-link>
             </li>
             <li v-if="currentUser.role !== 'Coordinator'">

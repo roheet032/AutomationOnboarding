@@ -19,7 +19,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="(user, index) in users" :key="index">
-                                <td>{{ currentUser }}</td>
                                 <td>{{ user.profile.name }}</td>
                                 <td>{{ user.emails[0].address }}</td>
                                 <td>{{ user.profile.organizationName }}</td>
@@ -55,19 +54,12 @@ export default {
         Sidebar,
         UserForm
     },
-    data() {
-        return {
-            currentUser: Meteor.user(),
-            isModalOpen: false
-        };
-    },
     meteor: {
         $subscribe: {
             users: [],
         },
         users() {
-            console.log(currentUser)
-            return Meteor.users.find({'profile.organizationId': currentUser.organizationId}).fetch();
+            return Meteor.users.find().fetch();
         },
 
     },
@@ -113,24 +105,24 @@ export default {
                 }
             });
         },
-        getUser() {
-            const currentUser = Meteor.user();
-            if (currentUser) {
-                this.currentUser = {
-                    // org: currentUser.profile.organizationName,
-                    role: currentUser.profile.role,
-                    // id: currentUser._id,
-                    name: currentUser.profile.name,
-                    // organizationId: currentUser.profile.organizationId.name
-                };
-            }
-        },
+        // getUser() {
+        //     const currentUser = Meteor.user();
+        //     if (currentUser) {
+        //         this.currentUser = {
+        //             // org: currentUser.profile.organizationName,
+        //             role: currentUser.profile.role,
+        //             // id: currentUser._id,
+        //             name: currentUser.profile.name,
+        //             // organizationId: currentUser.profile.organizationId.name
+        //         };
+        //     }
+        // },
         
     },
-    created() {
-        this.getUser();
+    // created() {
+    //     this.getUser();
       
-    },
+    // },
         
 };
 </script>

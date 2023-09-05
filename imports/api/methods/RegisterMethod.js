@@ -13,6 +13,7 @@ Meteor.methods({
       profile: {
         name: userData.name,
         role: userData.role,
+        organizationId:userData.organizationId,
       },
     });
 
