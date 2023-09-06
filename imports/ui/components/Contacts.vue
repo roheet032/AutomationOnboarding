@@ -4,7 +4,7 @@
     <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button fixed-add-button" v-if="currentUser.role !== 'Coordinator'" @click="openAddContactModal">Add Contact</button>
+                <button class="add-button" v-if="currentUser.role !== 'Coordinator'" @click="openAddContactModal">Add Contact</button>
                 <div class="contact-table-container" :class="{ 'blur-background': isModalOpen }"></div>
                 <div class="table-container">
                     <table class="contact-table">
@@ -76,11 +76,6 @@ export default {
         return [];
     } 
     },
-    //     contacts() {
-    //         return ContactsCollection.find().fetch();
-    //     }
-    // },
-    
 
     methods: {
     
@@ -94,8 +89,8 @@ export default {
             this.isModalOpen = true;
             this.$refs.contactForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
             this.$refs.contactForm.showModal(); // Call showModal() method in ContactForm
-            this.$refs.contactForm.populateForm(contact);
-            //put database data into form 
+            this.$refs.contactForm.populateForm(contact);    
+           
 
         },
         handleContactAdded() {
@@ -118,9 +113,7 @@ export default {
             const currentUser = Meteor.user();
             if (currentUser) {
                 this.currentUser = {
-                    // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
-                    // id: currentUser._id,
                     name: currentUser.profile.name
                 };
             }
@@ -136,46 +129,27 @@ export default {
 </script>
 
 <style scoped>
-
-.fixed-add-button {
-  position: fixed;
-  top: 90px;
-  right:250px;
-  background-color: #7745D6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  z-index: 1; /* Ensure it's above the scrollable content */
-}
-
 .table-container {
-  margin-top: 50px; /* Add margin to separate the button and table */
-  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  margin-top: 50px; 
+  max-height: calc(80vh - 50px); 
   overflow-y: auto;
-  border: 1px solid #ddd; /* Add a border for separation */
+  border: 1px solid #ddd; 
 }
 
 .container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* Center horizontally */
     height: 200px;
     margin-left: 200px;
-    /* Ensure full viewport height */
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center horizontally */
     justify-content: center;
-    /* Center vertically */
     flex: 1;
-    /* Take up remaining height */
     padding: 10px;
     margin-top: 60px;
 
@@ -183,9 +157,9 @@ export default {
 
 .contact-table-container {
     width: 100%;
-    padding: 20px;
+    padding: 5px;
     text-align: center;
-    /* Center table content */
+
 }
 
 @media (max-width: 768px) {
@@ -202,13 +176,6 @@ export default {
         padding: 10px;
     }
 }
-
-/* .main-content {
-    position: absolute;
-    right: 200px;
-    top: 50px;
-
-} */
 
 .contact-table {
     text-align: center;
@@ -271,8 +238,7 @@ button.delete-button {
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Adjust opacity as needed */
     backdrop-filter: blur(5px);
-    /* Adjust the blur intensity as needed */
+
 }
 </style>

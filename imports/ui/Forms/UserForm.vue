@@ -18,7 +18,7 @@
                         <label for="password">User Password:</label>
                         <input type="password" id="password" class="input-field" v-model="formData.password" required />
                     </div>
-                    <div v-if="mode !== 'edit'"  class="form-group">
+                    <div v-if="mode !== 'edit' " class="form-group">
                         <label for="organization">Organization:</label>
                         <select id="organization" class="input-field" v-model="formData.organizationName">
 
@@ -55,25 +55,22 @@ import {
 import { OrganizationsCollection } from '../../api/Collection/OrganizationsCollection'
 export default {
     name: "UserForm",
-
     data() {
         return {
             mode: 'add',
             modalVisible: false,
-           
             formData: {
                 name: "",
                 email: "",
                 password: "",
                 organizationName: "",
                 role: ""
-
             },
-            // organizationsList: [],
-            // organizations: ["Organization 1", "Organization 2", "Organization 3"], // example organizations
+            currentUser:Meteor.user(),   //define current user
             roles: ["Admin", "Coordinator"]
         };
     },
+    
     meteor: {
         $subscribe: {
             users: [],
@@ -107,9 +104,27 @@ export default {
     async handleUser() {
       try {
         if (this.mode === "add") {
-            const selectedOrganization = this.organizations.find(
+            
+
+             // Check if a user with the same email already exists
+            const userExists = Meteor.users.findOne({ 'emails.address': this.formData.email });
+
+            if (userExists) {
+            alert("A user with this email already exists.");
+            return;
+            }
+            //this is for selecting organization if organization is KeelaAdmin all organization will display and if user is of specific org it will only display specific orgname
+            let selectedOrganization
+            if(this.currentUser.profile.role==='KeelaAdmin'){
+                selectedOrganization = this.organizations.find(
             (org) => org.name === this.formData.organizationName
+          );}
+          else{
+            selectedOrganization = this.organizations.find(
+            (org) => org.name === this.currentUser.profile.organizationName
           );
+          }
+             
 
           if (!selectedOrganization) {
             alert("Invalid organization name");
@@ -128,7 +143,6 @@ export default {
           role: this.formData.role,
           organizationId:this.formData.organizationId,
           organizationName: this.formData.organizationName
-          // Add any other profile fields you need to update
         },
     });
           this.$emit("users-updated");
@@ -224,7 +238,6 @@ export default {
     background-color: blue;
     color: white;
     margin-right: 15px;
-    /* Adjust the spacing as needed */
 }
 
 .add-button:hover {

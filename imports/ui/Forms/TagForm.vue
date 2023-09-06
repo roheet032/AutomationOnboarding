@@ -43,20 +43,27 @@ export default {
     methods: {
         showModal() {
             this.mode='add',
-            this.modalVisible = true; // Show the modal
+            this.modalVisible = true; 
         },
         closeModal() {
-            this.modalVisible = false; // Close the modal
+            this.modalVisible = false; 
         },
         populateForm(tag) {
         this.mode="edit";
-        this.formData = { ...tag }; // Populate the form data with the contact's data
+        this.formData = { ...tag };
     },
     async handleTag() {
             const userId = Meteor.userId();
             const user=Meteor.user();
+            const existingTag = TagsCollection.findOne({ tagName: { $regex: new RegExp(`^${this.formData.tagName}$`, 'i') } });
             try {
                 if (this.mode === 'add') {
+                    
+
+            if (existingTag) {
+            alert("Tag already exists.");
+            return;
+            }
                     const newTag = {
                 tagName: this.formData.tagName,
                 organizationName: user.profile.organizationName // Set the organizationName based on the logged-in user
@@ -100,9 +107,9 @@ export default {
       
     },
         cancelFormAndCloseModal() {
-            this.modalVisible = false; // Hide the modal
-            this.$emit("close-modal"); // Emit event to close background blur
-            this.resetFormData(); // Clear form fields on cancel
+            this.modalVisible = false; 
+            this.$emit("close-modal"); 
+            this.resetFormData(); 
         },
     }
 };
@@ -174,7 +181,7 @@ export default {
     background-color: blue;
     color: white;
     margin-right: 15px;
-    /* Adjust the spacing as needed */
+    
 }
 
 .add-button:hover {

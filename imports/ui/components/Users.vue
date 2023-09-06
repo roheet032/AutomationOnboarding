@@ -5,7 +5,7 @@
         <div class="main-content">
             <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
                 <div class="addContactModal">
-                    <button class="add-button fixed-add-button" @click="openAddUserModal">Add Users</button>
+                    <button class="add-user-button fixed-add-user-button" @click="openAddUserModal">Add Users</button>
                     <div class="table-container">
                         <table class="contact-table">
                         <thead>
@@ -66,35 +66,26 @@ export default {
     
     methods: {
 
-        canEditDeleteUser(user) {
-        // Check if the logged-in user is KeelaAdmin, and if they are, return false
-        if (this.currentUser.role === 'KeelaAdmin') {
-            return false;
-        }
-        // Otherwise, allow editing and deletion for other users
-        return true;
-    },
-
         openAddUserModal() {
             this.isModalOpen = true;
-            this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.userForm.showModal(); 
             this.$refs.userForm.clearForm();
         },
         openEditUserModal(user) {
             this.isModalOpen = true;
-            this.$refs.userForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
-            this.$refs.userForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.userForm.mode = 'edit'; 
+            this.$refs.userForm.showModal(); 
             this.$refs.userForm.populateForm(user);
-            //put database data into form 
+           
 
         },
         handleUserAdded() {
-            this.isModalOpen = false; // Close the modal after inserting value in form
+            this.isModalOpen = false; 
         },
 
         handleUserUpdated() {
-            this.isModalOpen = false; // Close the modal
-            this.$refs.userForm.clearForm(); // Clear the form
+            this.isModalOpen = false; 
+            this.$refs.userForm.clearForm(); 
 
         },
        
@@ -104,73 +95,39 @@ export default {
                     console.error("Delete error:", error);
                 }
             });
-        },
-        // getUser() {
-        //     const currentUser = Meteor.user();
-        //     if (currentUser) {
-        //         this.currentUser = {
-        //             // org: currentUser.profile.organizationName,
-        //             role: currentUser.profile.role,
-        //             // id: currentUser._id,
-        //             name: currentUser.profile.name,
-        //             // organizationId: currentUser.profile.organizationId.name
-        //         };
-        //     }
-        // },
-        
-    },
-    // created() {
-    //     this.getUser();
-      
-    // },
-        
+        },    
+    },     
 };
 </script>
 
 <style scoped>
-.fixed-add-button {
-  position: fixed;
-  top: 50px;
-  right:300px;
-  background-color: #7745D6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  z-index: 1; /* Ensure it's above the scrollable content */
+.container {
+  display: flex;
+  margin-left:200px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
 }
+
 
 .table-container {
-  margin-top: 50px; /* Add margin to separate the button and table */
-  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  margin-top:100px;
+  margin-left:200px;
+  max-height: calc(80vh - 50px); 
   overflow-y: auto;
-  border: 1px solid #ddd; /* Add a border for separation */
+  border: 1px solid #ddd; 
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    /* Center horizontally */
-    height: 300px;
-    margin-left: 200px;
-    /* Ensure full viewport height */
-}
+
 
 .main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center horizontally */
     justify-content: center;
-    /* Center vertically */
     flex: 1;
-    /* Take up remaining height */
     padding: 10px;
-    /* Add padding for spacing */
     margin:60px;
-
 }
 
 .contact-table {
@@ -208,9 +165,9 @@ button.delete-button {
     color: white;
 }
 
-.add-button {
+.add-user-button {
     float: right;
-    margin-top: 15px;
+    margin-top:-50px;
     margin-bottom: 5px;
     background-color: #7745D6;
     color: white;
@@ -223,7 +180,6 @@ button.delete-button {
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
-        /* Stack sidebar and main content on small screens */
     }
 
     .main-content {

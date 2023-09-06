@@ -39,10 +39,6 @@
 </template>
 
 <script>
-// import {
-//     Meteor
-// } from "meteor/meteor";
-
 export default {
 
     data() {
@@ -53,8 +49,10 @@ export default {
             confirmPassword: "",
             role: "",
             organizationId:"",
-            roles: ["Admin", "Coordinator", "KeelaAdmin"],
+            roles: ["KeelaAdmin"],
+            
         };
+        
     },
 
     methods: {
@@ -79,6 +77,7 @@ export default {
             Accounts.createUser(userData, (error) => {
                 if (error) {
                     console.log(error.reason);
+                    alert("User creation failed: " + error.reason);     //show error message if email is already exist
 
                 } else {
                     console.log(userData)
@@ -88,24 +87,6 @@ export default {
                     });
                 }
             });
-
-            // Call your registration API or Meteor method here
-            // Meteor.call("users.register", userData, (error, userId) => {
-            //     if (error) {
-            //         alert("Email already exists");
-            //     } else {
-            //         // Assign the selected role to the registered user
-            //         UserCollections.update(userId, { $set: { role: this.role } });
-
-            //         alert("Account created successfully!!!");
-            //         this.$router.push('/login');
-            //         // Manually redirect to the login page using window.location
-            //         // window.location.href = '/login'; // Replace with the actual login route
-            //     }
-            // });
-
-            // // Insert user data into the RegisterCollection
-            // UserCollections.insert(userData);
         },
     },
 
@@ -186,4 +167,5 @@ select {
     transform: translateY(-50%);
     pointer-events: none;
 }
+
 </style>

@@ -43,13 +43,6 @@ import {
 
 export default {
     name: "LandingPage",
-    data() {
-        return {
-            // name: "",
-      
-        };
-    },
-
     methods: {
         handleLogout() {
             Meteor.logout((error) => {
@@ -64,30 +57,15 @@ export default {
             const currentUser = Meteor.user();
             if (currentUser) {
                 this.currentUser = {
-                    // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
-                    // id: currentUser._id,
                     name: currentUser.profile.name
                 };
             }
-        },
-
-        // updateUserLoggedInStatus() {
-        //     // Check if the user is logged in
-        //     this.userIsLoggedIn = !!Meteor.userId();
-        // },
-
-   
+        },  
     },
 
     created() {
         this.getUser();
-        // // Fetch user data and update userRole
-        // this.onUserAuthenticated();
-
-        // // Subscribe to the 'userData' publication
-        // this.userDataSubscription = Meteor.subscribe('users');
-        // this.updateUserLoggedInStatus();
     },
     
 
@@ -103,20 +81,19 @@ export default {
 }
 .main-content {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    flex: 1; /* Take up remaining height */
-    padding: 10px; /* Add padding for spacing */
+    justify-content: center; 
+    align-items: center; 
+    flex: 1; 
+    padding: 10px; 
 }
 
 .dashboard-image {
     max-width: 100hh; 
     height: 100vh;
-    margin-left:300px/* Ensure the image doesn't exceed its container */
+    margin-left:300px;
 }
 .sidebar {
     position: fixed;
-    /* left: -250px; */
     left: 0;
     width: 250px;
     height: 100%;
@@ -221,7 +198,7 @@ label #cancel {
     padding: 4px;
 }
 
-/* Style the links inside the navigation bar */
+
 .topnav a {
     float: left;
     color: #f2f2f2;
@@ -232,13 +209,13 @@ label #cancel {
 
 }
 
-/* Change the color of links on hover */
+
 .topnav a:hover {
     color: black;
     background: grey;
 }
 
-/* Add a color to the active/current link */
+
 .topnav a.active {
     background-color: #04AA6D;
     color: white;

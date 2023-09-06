@@ -46,128 +46,135 @@
 </template>
 
 <script>
- import {
-     Meteor
- } from 'meteor/meteor'
- import {
-     TagsCollection
- } from "../../api/Collection/TagsCollection";
- import {
-     ContactsCollection
- } from '../../api/Collection/ContactsCollection'
- export default {
-     name: "ContactForm",
-     data() {
-         return {
-             mode: 'add',
-             modalVisible: false,
-             formData: {
-                 fullName: "",
-                 email: "",
-                 address: "",
-                 phonenumber: "",
-                 tags: "",
+import {
+    Meteor
+} from 'meteor/meteor'
+import {
+    ContactsCollection
+} from '../../api/Collection/ContactsCollection'
+import {
+    TagsCollection
+} from "../../api/Collection/TagsCollection";
+export default {
+    name: "ContactForm",
+    data() {
+        return {
+            mode: 'add',
+            modalVisible: false,
+            formData: {
+                fullName: "",
+                email: "",
+                address: "",
+                phonenumber: "",
+                tags: "",
 
-             }
-         };
-     },
-     created() {
-         console.log(this.tags);
-     },
-     meteor: {
-         $subscribe: {
-             tags: [],
+            }
+        };
+    },
+    created() {
+        console.log(this.tags);
+    },
+    meteor: {
+        $subscribe: {
+            tags: [],
 
-         },
-         tags() {
-             if (!Meteor.user()) {
-                 return [];
+        },
+        tags() {
+            if (!Meteor.user()) {
+                return [];
 
-             }
-             const tag = TagsCollection.find().fetch();
-             console.log(tag)
-             return tag
-         }
-     },
-     methods: {
-         showModal() {
-             this.mode = 'add';
-             this.modalVisible = true; // Show the modal
-         },
-         closeModal() {
-             this.modalVisible = false; // Close the modal
-         },
-         populateForm(contact) {
-             this.mode = "edit";
-             this.formData = {
-                 ...contact
-             }; // Populate the form data with the contact's data
-         },
+            }
+            const tag = TagsCollection.find().fetch();
+            console.log(tag)
+            return tag
+        }
+    },
+    methods: {
+        showModal() {
+            this.mode = 'add';
+            this.modalVisible = true; // Show the modal
+        },
+        closeModal() {
+            this.modalVisible = false; // Close the modal
+        },
+        populateForm(contact) {
+            this.mode = "edit";
+            this.formData = {
+                ...contact
+            }; // Populate the form data with the contact's data
+        },
 
-         async handleContact() {
-             const userId = Meteor.userId();
-             const user = Meteor.user();
-             try {
-                 if (this.mode === 'add') {
-                     const newContact = {
-                         fullName: this.formData.fullName,
-                         email: this.formData.email,
-                         address: this.formData.address,
-                         phonenumber: this.formData.phonenumber,
-                         tags: this.formData.tags,
-                         organizationName: user.profile.organizationName
+        async handleContact() {
+            const userId = Meteor.userId();
+            const user = Meteor.user();
+            try {
+                if (this.mode === 'add') {
+                    const existingContact = ContactsCollection.findOne({
+                        email: this.formData.email
+                    });
 
-                     }
-                     await Meteor.call('contacts.insert', newContact,
-                     // {...this.formData },
-                          (error) => {
-                         if (!error) {
-                             this.$emit('contact-added');
-                             alert('Contact Created Successfully');
-                         }
-                     });
-                 } else if (this.mode === 'edit') {
-                     await Meteor.call('contacts.update', {
-                         ...this.formData
-                     }, (error) => {
-                         if (!error) {
-                             this.$emit('contact-updated'); // Emit event for successful update
-                             alert('Contact Updated Successfully');
-                         }
-                     });
-                 }
-             } catch (error) {
-                 alert(error.message);
-             }
-             this.closeModal();
-         },
-         clearForm() {
-             this.formData.fullName = "";
-             this.formData.email = "";
-             this.formData.address = "";
-             this.formData.phonenumber = "";
-             this.formData.tags = "";
-         },
-         deleteContact() {
-             if (this.contact._id) {
-                 if (this.contact._id) {
-                     Meteor.call('contacts.remove', this.contact._id, (error) => {
-                         if (error) {
-                             console.error('Delete error:', error);
-                         }
-                     });
-                 }
-             }
+                    if (existingContact) {
+                        alert('A contact with this email already exists.');
+                        return; 
+                    }
+                    const newContact = {
+                        fullName: this.formData.fullName,
+                        email: this.formData.email,
+                        address: this.formData.address,
+                        phonenumber: this.formData.phonenumber,
+                        tags: this.formData.tags,
+                        organizationName: user.profile.organizationName
 
-         },
-         cancelFormAndCloseModal() {
-             this.modalVisible = false; // Hide the modal
-             this.$emit("close-modal"); // Emit event to close background blur
-             this.resetFormData(); // Clear form fields on cancel
-         },
+                    }
+                    await Meteor.call('contacts.insert', newContact,
+                        (error) => {
+                            if (!error) {
+                                this.$emit('contact-added');
+                                alert('Contact Created Successfully');
+                            }
+                        });
+                } else if (this.mode === 'edit') {
+                    await Meteor.call('contacts.update', {
+                        ...this.formData
+                    }, (error) => {
+                        if (!error) {
+                            this.$emit('contact-updated'); // Emit event for successful update
+                            alert('Contact Updated Successfully');
+                        }
+                    });
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+            this.closeModal();
+        },
+        clearForm() {
+            this.formData.fullName = "";
+            this.formData.email = "";
+            this.formData.address = "";
+            this.formData.phonenumber = "";
+            this.formData.tags = "";
+        },
+        deleteContact() {
+            if (this.contact._id) {
+                if (this.contact._id) {
+                    Meteor.call('contacts.remove', this.contact._id, (error) => {
+                        if (error) {
+                            console.error('Delete error:', error);
+                        }
+                    });
+                }
+            }
 
-     }
- };
+        },
+        cancelFormAndCloseModal() {
+            this.modalVisible = false; // Hide the modal
+            this.$emit("close-modal"); // Emit event to close background blur
+            this.resetFormData(); // Clear form fields on cancel
+        },
+
+    }
+};
 </script>
 
 <style scoped>
@@ -194,20 +201,6 @@
     width: 100%;
     padding: 20px;
 }
-
-/* .form-container {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: lightgray;
-  text-align: left;
-  position:fixed;
-  top:70px;
-  bottom: 150px;
-  right:500px;
-  z-index: 99;
-
-} */
 
 .form-title {
     font-size: 22px;
@@ -250,7 +243,6 @@
     background-color: blue;
     color: white;
     margin-right: 15px;
-    /* Adjust the spacing as needed */
 }
 
 .add-button:hover {

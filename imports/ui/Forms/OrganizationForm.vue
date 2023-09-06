@@ -42,7 +42,6 @@
   
 <script>
 import { Meteor } from 'meteor/meteor';
-import { OrganizationsCollection } from '../../api/Collection/OrganizationsCollection'
 export default {
 
     name: "OrganizationForm",
@@ -62,14 +61,14 @@ export default {
     methods: {
         showModal() {
             this.mode='add',
-            this.modalVisible = true; // Show the modal
+            this.modalVisible = true; 
         },
         closeModal() {
-            this.modalVisible = false; // Close the modal
+            this.modalVisible = false; 
         },
         populateForm(organization) {
         this.mode="edit";
-        this.formData = { ...organization }; // Populate the form data with the contact's data
+        this.formData = { ...organization }; 
     },
     async handleOrganization() {
             const userId = Meteor.userId();
@@ -113,9 +112,9 @@ export default {
       
     },
     cancelFormAndCloseModal() {
-      this.modalVisible = false; // Hide the modal
-      this.$emit("close-modal"); // Emit event to close background blur
-      this.resetFormData(); // Clear form fields on cancel
+      this.modalVisible = false; 
+      this.$emit("close-modal"); 
+      this.resetFormData(); 
     },
       
     }
@@ -148,19 +147,6 @@ export default {
     padding: 20px;
 }
 
-/* .form-container {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: lightgray;
-  text-align: left;
-  position:fixed;
-  top:70px;
-  bottom: 150px;
-  right:500px;
-  z-index: 99;
-
-} */
 
 .form-title {
     font-size: 22px;
@@ -219,7 +205,7 @@ export default {
 .add-button {
   background-color: blue;
   color: white;
-  margin-right: 15px; /* Adjust the spacing as needed */
+  margin-right: 15px; 
 }
 
 .add-button:hover {

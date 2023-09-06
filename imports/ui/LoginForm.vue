@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="loginbtn" v-on:click="redirectToLandingPage"><span class="material-symbols-outlined">login</span>Log In</button><br>
-                <div class="register">Haven't Registered Yet? <br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
+                <div class="register">Doesn't Have KeelaAdmin Account??<br><button v-on:click="redirectToRegisterPage">Register Now</button></div>
             </div>
         </form>
     </div>
@@ -47,11 +47,6 @@ export default {
         email: this.email,
         password: this.password,
       };
-      // Here, you can implement your login logic using Meteor's authentication methods.
-      // For simplicity, we'll just display the login credentials in the console.
-      console.log('Login Attempt:');
-      console.log('Email:', this.email);
-      console.log('Password:', this.password);
     },
 
     handleLogin(event) {
@@ -71,7 +66,7 @@ export default {
    
   },
 };
-// Call your login API or Meteor method here
+
 </script>
 
   
@@ -152,7 +147,7 @@ button:hover {
     cursor: pointer;
 }
 
-/* Center the button in the form */
+
 .form-group:last-child {
     text-align: center;
 }

@@ -1,10 +1,10 @@
-<!-- imports/ui/Homepage.vue -->
+
 <template>
   <div class="homepage">
     
     <div class="background-image">
 
-      <!-- Insert the login button here -->
+      
       <button @click="redirectToLogin" class="login-button">Click Me To Enter KeelaWorld<span class="material-symbols-outlined">
 login
 </span></button>
@@ -19,7 +19,6 @@ export default {
  
   methods: {
     redirectToLogin() {
-      // Redirect to the login page when the login button is clicked
       this.$router.push('/login');
     },
   },
@@ -27,13 +26,13 @@ export default {
 </script>
 
 <style>
-/* Add your styles for the homepage here */
+
 
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* Hide vertical scroll bars */
+  overflow: hidden; 
 }
 
 .homepage {
@@ -41,7 +40,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Use min-height instead of height */
+  min-height: 100vh; 
   background-size: cover;
   background-position: center;
   overflow: auto; /* Enable scrolling for the .homepage div */
@@ -55,7 +54,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('keelabackground.png'); /* Replace with your image path */
+  background-image: url('keelabackground.png'); 
   background-size: cover;
   background-position: center;
 }

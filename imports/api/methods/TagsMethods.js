@@ -11,18 +11,13 @@ Meteor.methods({
     const currentUser = Meteor.users.findOne(this.userId);
 
     // Check if the user's role is keelaAdmin or their organization matches the tag's organization
-    if (currentUser.profile.role === 'keelaAdmin' || tagData.organizationName === currentUser.profile.organizationName) {
+    if (currentUser.profile.role === 'KeelaAdmin' || tagData.organizationName === currentUser.profile.organizationName) {
       TagsCollection.insert(tagData);
     } else {
       throw new Meteor.Error('not-authorized', 'You are not authorized to perform this action.');
     }
   },
 
-
-
-    // 'tags.insert'(formData) {
-    //   TagsCollection.insert(formData);
-    // },
     'tags.update'(tag) {
       TagsCollection.update(tag._id, {
         $set: {

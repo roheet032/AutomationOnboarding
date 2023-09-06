@@ -6,7 +6,7 @@
         <div class="main-content">
         <modal name="addContactModal" :adaptive="true" width="400px" height="280px">
             <div class="addContactModal">
-                <button class="add-button fixed-add-button" @click="openAddTagModal">Create Tag</button>
+                <button class="add-button" @click="openAddTagModal">Create Tag</button>
                 <div class="tag-container">
                     <table class="contact-table">
                     <thead>
@@ -55,17 +55,6 @@ export default {
             isModalOpen: false
         };
     },
-    // data() {
-    //     return {
-    //         contacts: [{
-                
-    //                 tagName: "Rohit Tag",
-                   
-    //             }
-    //             // Add more contact objects as needed
-    //         ]
-    //     };
-    // },
     meteor: {
         $subscribe: {
             tags: []
@@ -77,24 +66,7 @@ export default {
         }
         return [];
     }
-        // tags() {
-        //     if (!this.currentUser) {
-        //         return [];
-        //     }
-
-        //     if (this.currentUser.profile.organizationId) {
-        //         return TagsCollection.find({
-        //             organizationId: this.currentUser.profile.organizationId
-        //         }).fetch();
-        //     }
-
-        //     return [];
-        // }
     },
-    //     tags() {
-    //         return TagsCollection.find().fetch();
-    //     }
-    // },
     methods: {
         openAddTagModal() {
             this.isModalOpen = true;
@@ -105,8 +77,8 @@ export default {
         },
         openEditTagModal(tag) {
             this.isModalOpen = true;
-            this.$refs.tagForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
-            this.$refs.tagForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.tagForm.mode = 'edit'; // Set mode to 'edit' in TagForm
+            this.$refs.tagForm.showModal(); // Call showModal() method in TagForm
             this.$refs.tagForm.populateForm(tag);
             //put database data into form 
 
@@ -115,8 +87,8 @@ export default {
             this.isModalOpen = false; // Close the modal after inserting value in form
         },
         handleTagsUpdated(){
-            this.isModalOpen = false; // Close the modal
-            this.$refs.tagForm.clearForm(); // Clear the form
+            this.isModalOpen = false; 
+            this.$refs.tagForm.clearForm();
         },
        
         deleteTag(tagId) {
@@ -144,41 +116,30 @@ export default {
 
     
 <style scoped>
-.fixed-add-button {
-  position: fixed;
-  top: 50px;
-  right:600px;
-  background-color: #7745D6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  z-index: 1; /* Ensure it's above the scrollable content */
-}
+
 
 .tag-container {
-  margin-top: 50px; /* Add margin to separate the button and table */
-  max-height: calc(80vh - 50px); /* Adjust the maximum height based on the desired spacing */
+  margin-top: 50px; 
+  max-height: calc(80vh - 50px); 
   overflow-y: auto;
-  border: 1px solid #ddd; /* Add a border for separation */
+  border: 1px solid #ddd; 
 }
 .container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Center horizontally */
+    justify-content: space-between; 
     height: 300px;
     margin-left:200px;
-     /* Ensure full viewport height */
+  
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
-    flex: 1; /* Take up remaining height */
-    padding: 10px; /* Add padding for spacing */
+    align-items: center; 
+    justify-content: center; 
+    flex: 1; 
+    padding: 10px; 
     margin:60px;
 
 }
@@ -221,7 +182,7 @@ button.delete-button {
 
 .add-button {
     float: right;
-    margin-top: 15px;
+    margin-top: -50px;
     margin-bottom: 5px;
     background-color: #7745D6;
     color: white;
@@ -233,7 +194,7 @@ button.delete-button {
 
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Stack sidebar and main content on small screens */
+        flex-direction: column; 
     }
 
     .main-content {

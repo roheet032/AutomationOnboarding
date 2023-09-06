@@ -68,24 +68,24 @@ export default {
     methods: {
         openAddOrganizationModal() {
             this.isModalOpen = true;
-            this.$refs.organizationForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.organizationForm.showModal(); 
             this.$refs.organizationForm.clearForm();
         },
 
         handleOrganizationsAdded() {
-            this.isModalOpen = false; // Close the modal after inserting value in form
+            this.isModalOpen = false; 
         },
 
         handleOrganizationsUpdated(){
-            this.isModalOpen = false; // Close the modal
-            this.$refs.organizationForm.clearForm(); // Clear the form
+            this.isModalOpen = false; 
+            this.$refs.organizationForm.clearForm(); 
         },
         openEditOrganizationModal(contact) {
             this.isModalOpen = true;
-            this.$refs.organizationForm.mode = 'edit'; // Set mode to 'edit' in ContactForm
-            this.$refs.organizationForm.showModal(); // Call showModal() method in ContactForm
+            this.$refs.organizationForm.mode = 'edit'; 
+            this.$refs.organizationForm.showModal(); 
             this.$refs.organizationForm.populateForm(contact);
-            //put database data into form 
+            
 
         },
         deleteOrganization(organizationId) {
@@ -104,19 +104,18 @@ export default {
 .container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Center horizontally */
+    justify-content: space-between; 
     height: 300px;
     margin-left:200px;
-     /* Ensure full viewport height */
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
-    flex: 1; /* Take up remaining height */
-    padding: 10px; /* Add padding for spacing */
+    align-items: center; 
+    justify-content: center; 
+    flex: 1; 
+    padding: 10px; 
     margin-top:60px;
 
 }
@@ -171,7 +170,7 @@ button.delete-button {
 
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Stack sidebar and main content on small screens */
+        flex-direction: column; 
     }
 
     .main-content {

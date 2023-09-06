@@ -51,11 +51,9 @@ export default {
             const currentUser = Meteor.user();
             if (currentUser) {
                 this.currentUser = {
-                    // org: currentUser.profile.organizationName,
                     role: currentUser.profile.role,
                     name: currentUser.profile.name
-                    // id: currentUser._id,
-                    // orgId: currentUser.profile.organizationId
+                   
                 };
             }
         },
@@ -84,7 +82,6 @@ export default {
 
 .sidebar {
     position: fixed;
-    /* left: -250px; */
     left: 0;
     width: 250px;
     height: 100%;
@@ -178,7 +175,7 @@ label #cancel {
 }
 
 section {
-    /* background: url(bg.jpeg) no-repeat; */
+    
     background-position: center;
     background-size: cover;
     height: 100vh;
@@ -199,7 +196,7 @@ section {
     padding: 4px;
 }
 
-/* Style the links inside the navigation bar */
+
 .topnav a {
     float: left;
     color: #f2f2f2;
@@ -210,13 +207,13 @@ section {
 
 }
 
-/* Change the color of links on hover */
+
 .topnav a:hover {
     color: black;
     background: grey;
 }
 
-/* Add a color to the active/current link */
+
 .topnav a.active {
     background-color: #04AA6D;
     color: white;

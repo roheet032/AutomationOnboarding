@@ -49,23 +49,26 @@ export const router = createRouter({
       component: () => import('./components/Users.vue'),
       meta:{requiresAuth:true},
     },
-  
-    // {
-    //   path: '/sidebar',
-    //   name: 'sidebar',
-    //   component: () => import('./Sidebar.vue'),
-    // },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('./components/Users.vue'),
+      meta:{requiresAuth:true},
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'unauthorized',
+      component: () => import('./Unauthorized.vue'),
+    },
     
   ],
 })
 
-// Add a global navigation guard to check if the user is logged in before accessing the route
+
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !Meteor.userId()) {
-    // Redirect to the login page if the route requires authentication and the user is not logged in
     next('/login');
   } else {
-    // Allow access to the route
     next();
   }
 });

@@ -1,7 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { OrganizationsCollection } from '../Collection/OrganizationsCollection'
-
 
 
 Meteor.methods({
@@ -17,8 +15,6 @@ Meteor.methods({
        
       },
     });
-
-    // return userId;
   },
 
   'users.update'(user) {
@@ -40,66 +36,3 @@ Meteor.methods({
   },
 
 });
-
-
-// import { Meteor } from 'meteor/meteor';
-// import { Accounts } from 'meteor/accounts-base';
-
-// Meteor.methods({
-//   insertUser(user) {
-//     if (!Meteor.users.findOne({ email: user.email })) {
-//       const userId = Accounts.createUser({
-//         email: user.email,
-//         password: user.password,
-//         profile: {
-//           fullName: user.fullName,
-//           organization: user.organization,
-//           role: user.role,
-//         },
-//       });
-//       return userId;
-//     } else {
-//       throw new Meteor.Error('Email already exists');
-//     }
-//   },
-  
-
-//   deleteUser(userId) {
-//     Meteor.users.remove(userId);
-//     return 'User deleted successfully';
-//   },
-
-//   updateUser(user) {
-//     Meteor.users.update(
-//       { _id: user._id },
-//       {
-//         $set: {
-
-//             ...user,
-//             'profile.fullName': user.profile.fullName,
-//             'profile.organization': user.profile.organization,
-//             'profile.role': user.profile.role,
-//         },
-//       })
-//   }
-
-// });
-// Meteor.methods({
-//   'accounts.insert'(formData) {
-//     Accounts.insert(formData);
-//   },
-
-
-//   'accounts.update'(user) {
-//     Accounts.update(user._id, {
-//       $set: {
-//         ...user,
-//       }
-//     })
-//   },
-
-
-//   'accounts.remove'(userId) {
-//     Accounts.remove(userId);
-//   },
-// });
