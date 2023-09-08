@@ -158,8 +158,8 @@ button.delete-button {
 
 .add-button {
     float: right;
-    margin-top: 15px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     background-color:#7745D6;
     color: white;
     border: none;

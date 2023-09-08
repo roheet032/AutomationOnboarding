@@ -129,116 +129,128 @@ export default {
 </script>
 
 <style scoped>
-.table-container {
-  margin-top: 50px; 
-  max-height: calc(80vh - 50px); 
-  overflow-y: auto;
-  border: 1px solid #ddd; 
-}
-
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    height: 200px;
-    margin-left: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 200px;
+  margin-left: 200px;
 }
 
 .main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 10px;
-    margin-top: 60px;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 10px;
+  margin-top: 60px;
 }
 
 .contact-table-container {
-    width: 100%;
-    padding: 5px;
-    text-align: center;
-
+  width: 100%;
+  padding: 5px;
+  text-align: center;
 }
 
+/* Media query for smaller screens */
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
+  .container {
+    flex-direction: column;
+  }
 
-    .main-content {
-        align-items: center;
-        justify-content: flex-start;
-    }
+  .main-content {
+    align-items: center;
+    justify-content: flex-start;
+  }
 
-    .contact-table-container {
-        padding: 10px;
-    }
+  .contact-table-container {
+    padding: 10px;
+  }
 }
+
 
 .contact-table {
-    text-align: center;
-    padding: 4px;
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+  text-align: center;
+  padding: 4px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-th,
-td {
-    padding: 12px 15px;
-    text-align: center;
-    border: 1px solid #ddd;
+th, td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
+
+
+.contact-table th:first-child {
+  text-align: center;
+}
+
+
+.contact-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
 
 button {
-    padding: 6px 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    margin-right: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
 }
+
 
 button.edit-button {
-    background-color: rgb(18, 18, 178);
-    color: white;
+  background-color: rgb(18, 18, 178);
+  color: white;
 }
+
 
 button.delete-button {
-    background-color: #c01c11;
-    color: white;
+  background-color: #c01c11;
+  color: white;
 }
+
 
 .add-button {
-    float: right;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    background-color: #7745D6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
+  background-color: #7745D6;
+  color: white;
+  margin-left:1000px;
+  
 }
 
-.add-contact:hover {
-    background-color: #622cc9;
-    cursor: pointer;
+
+button:hover {
+  opacity: 0.8;
 }
+
+.add-button:hover {
+  background-color: #622cc9;
+}
+
 
 .blur-background {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
 }
+.table-container {
+  margin-top: 20px;
+  max-height: calc(80vh - 50px);
+  overflow-y: auto; 
+  border: 1px solid #ddd;
+}
+
 </style>
