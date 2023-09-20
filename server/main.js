@@ -14,6 +14,7 @@ Meteor.publish('contacts', function publishContacts() {
 
 
 //Publication for Organization 
+
 import { OrganizationsCollection } from '../imports/api/Collection/OrganizationsCollection';
 import '../imports/api/Methods/OrganizationMethods'
 

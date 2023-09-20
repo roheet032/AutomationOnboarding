@@ -6,7 +6,7 @@
       </div>
       <h1>404!!! PAGE NOT FOUND</h1>
       <p>
-        Oops!! The page you are searching is not found.
+        Oops!!! The page you are searching is not found.
         </p>
       <router-link to="/" class="btn btn-primary">Go Home</router-link>
     </div>
